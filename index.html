@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয়</title>
+<link href="https://fonts.maateen.me/kalpurush/font.css" rel="stylesheet">
+
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  :root{
+    --green-dark:#4c6b1f;
+    --green:#6f8f2e;
+    --green-mid:#88a83f;
+    --green-light:#f2f6e9;
+    --gold:#d4af37;
+    --red:#c8102e;
+    --text:#222;
+    --muted:#555;
+    --border:#e2e6d8;
+    --bg:#ffffff;
+  }
+
+  body{
+    font-family:'Kalpurush','Noto Sans Bengali','Segoe UI',Tahoma,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    font-size:15px;
+  }
+  a{ color:inherit; }
+  ul{ list-style:none; }
+
+  .util-bar{
+    background:#001c08;
+    color:#cfe8d2;
+    font-size:13px;
+    padding:3px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .util-bar .left span{ margin-right:14px; }
+  .util-bar .right a{
+    color:#cfe8d2;
+    text-decoration:none;
+    margin-left:12px;
+    padding:1px 6px;
+    border-radius:2px;
+  }
+  .util-bar .right a:hover{ background:rgba(255,255,255,0.15); }
+  .util-bar .right a.active{ background:var(--gold); color:#1a1a1a; font-weight:700; }
+
+  .gov-strip{
+    background:var(--green-dark);
+    color:#fff;
+    text-align:center;
+    font-size:14px;
+    padding:3px 0;
+    letter-spacing:0.3px;
+  }
+
+  header{
+    background:linear-gradient(135deg, var(--green-dark), var(--green));
+    border-bottom:3px solid var(--gold);
+    padding:12px 24px;
+  }
+  .header-inner{
+    max-width:1300px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    gap:18px;
+  }
+  .emblem{
+    width:64px; height:64px;
+    border-radius:50%;
+    border:2px solid #fff;
+    overflow:hidden;
+    flex-shrink:0;
+    background:#fff;
+  }
+  .emblem img{ width:100%; height:100%; object-fit:cover; }
+
+  .title-block{ flex:1; min-width:220px; text-align:center; }
+  .title-block h1{
+    font-size:35px;
+    color:#fff;
+    font-weight:800;
+    line-height:1.35;
+  }
+  .title-block .en{
+    font-size:20px;
+    letter-spacing:.4px;
+    color:#dcefc9;
+    text-transform:uppercase;
+  }
+  .title-block .addr{ font-size:20px; color:#dcefc9; margin-top:2px; }
+  .title-block .eiin{ font-size:20px; color:#c7e2b0; }
+
+  .menu-toggle{
+    flex-shrink:0;
+    width:34px; height:34px;
+    border-radius:4px;
+    background:rgba(255,255,255,0.15);
+    border:1px solid rgba(255,255,255,0.4);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px;
+    cursor:pointer;
+  }
+  .menu-toggle:hover{ background:rgba(255,255,255,0.28); }
+
+  .officer-strip{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .officer-photos{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .officer-photos .card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    width:100%;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:10px 8px 8px;
+    font-size:14px;
+    font-weight:700;
+    color:var(--green-dark);
+    text-align:center;
+  }
+  .officer-photos .ph{
+    width:52px; height:52px;
+    border-radius:50%;
+    border:2px solid #3fa9e0;
+    background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:17.5px;
+    flex-shrink:0;
+    overflow:hidden;
+  }
+  .officer-photos .ph img{
+    width:100%; height:100%;
+    object-fit:cover;
+    border-radius:50%;
+  }
+  .officer-photos .card .name{ font-size:14px; color:var(--text); font-weight:700; }
+  .officer-photos .card .role{ font-size:13px; color:var(--green-dark); font-weight:600; }
+
+  .admin-login{
+    background:var(--green-dark);
+    color:#fff;
+    text-decoration:none;
+    font-size:14.5px;
+    font-weight:700;
+    padding:8px 16px;
+    border-radius:4px;
+    border:1px solid var(--gold);
+    white-space:nowrap;
+    flex-shrink:0;
+    transition:background .2s;
+  }
+  .admin-login:hover{ background:var(--green); }
+
+  nav.main-nav{
+    background:#fff;
+    border-top:3px solid var(--gold);
+    border-bottom:1px solid var(--border);
+    position:relative;
+    z-index:50;
+  }
+  nav.main-nav ul.top{
+    list-style:none;
+    display:flex;
+    flex-wrap:wrap;
+    max-width:1300px;
+    margin:0 auto;
+  }
+  nav.main-nav > .top > li{ position:relative; }
+  nav.main-nav a{
+    display:block;
+    color:#000;
+    text-decoration:none;
+    font-size:14.5px;
+    font-weight:600;
+    padding:9px 14px;
+    border-right:1px solid var(--border);
+    white-space:nowrap;
+  }
+  nav.main-nav > .top > li > a:hover{ background:var(--green-light); }
+  nav.main-nav > .top > li:first-child > a{
+    background:#fff;
+    color:#000;
+  }
+  nav.main-nav > .top > li:first-child > a:hover{
+    background:#f0f0f0;
+    color:#000;
+  }
+  nav.main-nav .dropdown{
+    display:none;
+    position:absolute;
+    top:100%; left:0;
+    min-width:250px;
+    background:#fff;
+    box-shadow:0 6px 14px rgba(0,0,0,0.18);
+    border-top:2px solid var(--gold);
+  }
+  nav.main-nav li:hover > .dropdown{ display:block; }
+  nav.main-nav .dropdown a{
+    color:var(--text);
+    padding:8px 12px;
+    font-size:14.5px;
+    font-weight:500;
+    border-right:none;
+    border-bottom:1px solid var(--border);
+  }
+  nav.main-nav .dropdown a:hover{ background:var(--green-light); color:var(--green-dark); }
+  nav.main-nav .dropdown li{ position:relative; }
+  nav.main-nav .dropdown .dropdown{ top:0; left:100%; }
+
+  .quicklink-strip{
+    background:#f4faf5;
+    border-bottom:1px solid var(--border);
+  }
+  .quicklink-strip .inner{
+    max-width:1300px;
+    margin:0 auto;
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    padding:8px 14px;
+  }
+  .quicklink-strip a{
+    background:#fff;
+    border:1px solid var(--border);
+    color:var(--green-dark);
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:14px;
+    white-space:nowrap;
+  }
+  .quicklink-strip a:hover{ background:var(--green); color:#fff; border-color:var(--green); }
+  .quicklink-strip a.emg{ border-color:var(--red); color:var(--red); }
+  .quicklink-strip a.emg:hover{ background:var(--red); color:#fff; }
+
+  .notice-strip{
+    background:linear-gradient(135deg, var(--green-dark), var(--green));
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    width:100%;
+    height:110px;
+    padding:0 24px;
+    box-sizing:border-box;
+  }
+  .notice-strip .tag{
+    background:var(--red);
+    color:#fff;
+    font-size:12.5px;
+    font-weight:700;
+    padding:5px 12px;
+    flex-shrink:0;
+    display:flex; align-items:center; gap:6px;
+  }
+  .notice-strip .tag .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:#ffd54a;
+    display:inline-block;
+    animation:blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{ opacity:1;} 50%{ opacity:.25;} }
+  .notice-strip .marq{ overflow:hidden; white-space:nowrap; flex:1; padding:6px 10px; }
+  .notice-strip .marq span{
+    display:inline-block;
+    padding-left:100%;
+    animation:scrollLeft 22s linear infinite;
+    color:#fff;
+    font-size:14px;
+  }
+  @keyframes scrollLeft{ 0%{ transform:translateX(0);} 100%{ transform:translateX(-100%);} }
+
+  .wrap{
+    max-width:1300px;
+    margin:0 auto;
+    padding:18px;
+    display:grid;
+    grid-template-columns:1fr 2fr;
+    gap:18px;
+  }
+
+  .hero-row{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:18px;
+    align-items:stretch;
+  }
+  .hero-notice{ margin-bottom:0; }
+  .hero-notice ul{ max-height:230px; overflow-y:auto; scroll-behavior:smooth; }
+
+  .carousel{
+    position:relative;
+    background:#fff;
+    border:1px solid var(--border);
+    overflow:hidden;
+    height:300px;
+  }
+  .carousel .slide{ position:absolute; inset:0; opacity:0; transition:opacity .7s ease; }
+  .carousel .slide.active{ opacity:1; }
+  .carousel .slide img{ width:100%; height:100%; object-fit:cover; }
+  .carousel .cap{
+    position:absolute; left:0; right:0; bottom:0;
+    background:linear-gradient(transparent, rgba(0,20,8,0.88));
+    color:#fff; padding:30px 14px 9px; font-size:15.5px; font-weight:700;
+  }
+  .carousel .dots{ position:absolute; bottom:8px; right:12px; display:flex; gap:6px; }
+  .carousel .dots span{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.5); cursor:pointer; }
+  .carousel .dots span.active{ background:var(--gold); }
+
+  .panel{ background:#fff; border:1px solid var(--border); margin-top:18px; }
+  .panel h3{
+    background:var(--green-dark); color:#fff; font-size:15px;
+    padding:8px 14px; letter-spacing:.3px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .panel h3 .refresh{ font-size:12.5px; font-weight:400; opacity:.8; }
+
+  table.info-table{ width:100%; border-collapse:separate; border-spacing:12px; background:transparent; }
+  table.info-table td{
+    text-align:center;
+    padding:0;
+    vertical-align:middle;
+    width:33.33%;
+  }
+  table.info-table td a{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+    text-decoration:none; color:var(--text); font-size:22px; font-weight:700;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.06);
+    transition:box-shadow .2s ease, border-color .2s ease;
+    height:250px;
+    box-sizing:border-box;
+    overflow:hidden;
+  }
+  table.info-table td a:hover{
+    color:var(--green-dark);
+    box-shadow:0 8px 18px rgba(0,0,0,0.14);
+    border-color:var(--gold);
+  }
+  table.info-table .ic{
+    width:100px; height:100px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:40px;
+    color:#fff;
+    font-weight:800;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,0.05);
+  }
+  table.info-table .ic.c-orange{ background:#fdae3d; }
+  table.info-table .ic.c-teal{ background:#3fa9e0; }
+  table.info-table .ic.c-blue{ background:#3d7fd8; }
+  table.info-table .ic.c-green{ background:#3fb56a; }
+  table.info-table .ic.c-purple{ background:#8a63d2; }
+  table.info-table .ic.c-gold{ background:#e0b93c; }
+  table.info-table .ic.c-red{ background:#e05555; }
+  table.info-table .ic.c-pink{ background:#d9578a; }
+  table.info-table .ic.c-cyan{ background:#3fc9c9; }
+
+  .side-box{ background:#fff; border:1px solid var(--border); margin-bottom:18px; }
+  .side-box h4{
+    background:var(--green); color:#fff; font-size:14px; padding:7px 12px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .side-box h4 .refresh{ font-size:12.5px; font-weight:400; opacity:.85; }
+  .side-box ul{ list-style:none; }
+  .side-box li{ border-bottom:1px solid var(--border); }
+  .side-box a{ display:block; text-decoration:none; color:var(--text); font-size:14.5px; padding:7px 12px; }
+  .side-box a:hover{ background:var(--green-light); color:var(--green-dark); }
+  .side-box .date{ display:block; font-size:12.5px; color:var(--muted); margin-top:2px; }
+  .side-box .empty{ padding:12px; font-size:14px; color:var(--muted); }
+
+  .notice-nav{ display:flex; gap:4px; }
+  .notice-nav .nbtn{
+    background:rgba(255,255,255,.18);
+    border:none; color:#fff; cursor:pointer;
+    width:20px; height:18px; border-radius:3px;
+    font-size:12.5px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .notice-nav .nbtn:hover{ background:var(--gold); color:#1a1a1a; }
+
+  .quick-badges{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    border:1px solid var(--border);
+    border-bottom:none;
+    margin-bottom:18px;
+    background:#fff;
+  }
+  .quick-badges a{
+    display:flex; align-items:center; gap:6px;
+    text-decoration:none;
+    color:var(--green-dark);
+    font-size:13px;
+    font-weight:700;
+    padding:6px 8px;
+    border-right:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+  }
+  .quick-badges a:nth-child(2n){ border-right:none; }
+  .quick-badges a:hover{ background:var(--green-light); }
+  .quick-badges .bic{
+    flex-shrink:0;
+    width:26px; height:20px;
+    border-radius:3px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px;
+    font-weight:800;
+    color:#fff;
+  }
+  .quick-badges .bic.c-blue{ background:#3d7fd8; }
+  .quick-badges .bic.c-green{ background:#3fb56a; }
+  .quick-badges .bic.c-orange{ background:#fdae3d; }
+  .quick-badges .bic.c-teal{ background:#3fa9e0; }
+  .quick-badges .bic.c-purple{ background:#8a63d2; }
+  .quick-badges .bic.c-gold{ background:#e0b93c; }
+  .quick-badges .bic.c-red{ background:#e05555; }
+
+  .full-btn{
+    display:block;
+    text-align:center;
+    background:var(--green);
+    color:#fff;
+    text-decoration:none;
+    font-size:14.5px;
+    font-weight:700;
+    padding:8px;
+    border:1px solid var(--green-dark);
+    margin-bottom:6px;
+  }
+  .full-btn:hover{ background:var(--green-dark); }
+
+  .side-box ul.icon-list li{ border-bottom:1px solid var(--border); }
+  .side-box ul.icon-list a{
+    display:flex; align-items:center; gap:10px;
+  }
+  .icon-circle{
+    flex-shrink:0;
+    width:22px; height:22px;
+    border-radius:50%;
+    background:var(--green-light);
+    border:1.5px solid var(--green);
+    color:var(--green-dark);
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px;
+  }
+
+  .emg-box a{ display:flex; align-items:center; gap:10px; }
+  .emg-ic{
+    flex-shrink:0;
+    min-width:30px;
+    text-align:center;
+    padding:3px 5px;
+    border-radius:5px;
+    font-size:12.5px;
+    font-weight:800;
+    color:#fff;
+  }
+  .emg-ic.c-blue{ background:#f0932b; }
+  .emg-ic.c-red{ background:#e05555; }
+  .emg-ic.c-pink{ background:#d9578a; }
+
+  .social-box a{ display:flex; align-items:center; gap:10px; }
+  .social-ic{
+    flex-shrink:0;
+    width:22px; height:22px;
+    border-radius:6px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px;
+    color:#fff;
+  }
+  .social-ic.c-fb{ background:#3b5998; }
+  .social-ic.c-yt{ background:#e05555; }
+  .social-ic.c-oc{ background:#3fa9e0; }
+  .social-ic.c-an{ background:#8a63d2; }
+
+  .link-strip{
+    background:#fff; border:1px solid var(--border);
+    display:flex; flex-wrap:wrap;
+    max-width:1300px; margin:0 auto 18px;
+  }
+  .link-strip a{
+    flex:1; min-width:150px; text-align:center; padding:9px 8px;
+    font-size:14px; font-weight:700; color:var(--green-dark);
+    text-decoration:none; border-right:1px solid var(--border);
+  }
+  .link-strip a:hover{ background:var(--green-light); }
+
+  footer{ background:var(--green-dark); color:#cfe8d2; margin-top:20px; }
+  .footer-inner{
+    max-width:1300px; margin:0 auto; padding:22px 20px;
+    display:grid; grid-template-columns:1.1fr 1fr 1fr 1fr; gap:20px; font-size:14.5px;
+  }
+  .footer-inner h5{
+    color:#fff; font-size:15.5px; margin-bottom:10px;
+    border-bottom:1px solid rgba(255,255,255,.2); padding-bottom:6px;
+  }
+  .footer-inner ul{ list-style:none; }
+  .footer-inner li{ margin-bottom:6px; }
+  .footer-inner a{ color:#cfe8d2; text-decoration:none; }
+  .footer-inner a:hover{ text-decoration:underline; }
+  .footer-bottom{
+    background:#001c08; text-align:center; padding:9px 20px;
+    font-size:13px; color:#a9cbb0;
+    display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
+  }
+
+  @media (max-width:900px){
+    .wrap{ grid-template-columns:1fr; }
+    .hero-row{ grid-template-columns:1fr; }
+    table.info-table td{ width:50%; display:block; }
+    .footer-inner{ grid-template-columns:1fr; }
+  }
+  @media (max-width:600px){
+    header{ padding:10px 12px; }
+    .title-block h1{ font-size:20px; }
+    nav.main-nav a{ padding:9px 11px; font-size:15px; }
+    .quick-badges{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="emblem"><img src="Logo.jpg" alt="বিদ্যালয়ের লোগো"></div>
+
+      <div class="title-block">
+        <h1 data-bn="কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয়" data-en="Kashiani Girish Chandra Pilot High School">কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয়</h1>
+        <div class="en">Kashiani Girish Chandra Pilot High School</div>
+        <div class="addr" data-bn="কাশিয়ানী, গোপালগঞ্জ — ঢাকা শিক্ষা বোর্ডের অধীন" data-en="Kashiani, Gopalganj — Under Dhaka Education Board">কাশিয়ানী, গোপালগঞ্জ — ঢাকা শিক্ষা বোর্ডের অধীন</div>
+        <div class="eiin" data-bn="EIIN: ১০৯৪৮৭ | স্থাপিত: ১৯০২" data-en="EIIN: 109487 | Established: 1902">EIIN: ১০৯৪৮৭ | স্থাপিত: ১৯০২</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+        <div class="menu-toggle" title="মেনু" aria-label="Menu">☰</div>
+        <div class="util-bar" style="background:transparent; padding:0; font-size:12.5px;">
+          <div class="right">
+            <a href="#" class="active" id="lang-bn">বাংলা</a>
+            <a href="#" id="lang-en">English</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="notice-strip">
+    <span class="tag"><span class="dot"></span> <span data-bn="বিজ্ঞপ্তি" data-en="Notice">বিজ্ঞপ্তি</span></span>
+    <div class="marq"><span data-bn="নতুন পরীক্ষার ফলাফল প্রকাশিত হয়েছে — নিচের নোটিশ বোর্ড দেখুন। বিস্তারিত জানতে নোটিশ বোর্ডে ক্লিক করুন।" data-en="New exam results have been published — see the notice board below. Click the notice board for details.">নতুন পরীক্ষার ফলাফল প্রকাশিত হয়েছে — নিচের নোটিশ বোর্ড দেখুন। বিস্তারিত জানতে নোটিশ বোর্ডে ক্লিক করুন।</span></div>
+  </div>
+
+  <nav class="main-nav">
+    <ul class="top">
+      <li><a href="index.html" data-bn="হোম পেজ" data-en="Home">হোম পেজ</a></li>
+      <li>
+        <a href="#" data-bn="বিদ্যালয় সম্পর্কে" data-en="About School">বিদ্যালয় সম্পর্কে</a>
+        <ul class="dropdown">
+          <li><a href="#" data-bn="ইতিহাস" data-en="History">ইতিহাস</a></li>
+          <li><a href="#" data-bn="শিক্ষক তালিকা" data-en="Teacher List">শিক্ষক তালিকা</a></li>
+          <li><a href="#" data-bn="নাগরিক সনদ" data-en="Citizen Charter">নাগরিক সনদ</a></li>
+          <li><a href="#" data-bn="প্রতিষ্ঠার নথি" data-en="Founding Documents">প্রতিষ্ঠার নথি</a></li>
+          <li><a href="#" data-bn="পরিচালনা কমিটি" data-en="Managing Committee">পরিচালনা কমিটি</a></li>
+          <li><a href="#" data-bn="তথ্য অধিকার আইনে দায়িত্বপ্রাপ্ত কর্মকর্তা" data-en="Right to Information Officer">তথ্য অধিকার আইনে দায়িত্বপ্রাপ্ত কর্মকর্তা</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" data-bn="ফরম" data-en="Forms">ফরম</a>
+        <ul class="dropdown">
+          <li><a href="#" data-bn="ছাত্র ভর্তি ফরম" data-en="Student Admission Form">ছাত্র ভর্তি ফরম</a></li>
+          <li><a href="#" data-bn="নাম ও বয়স সংশোধন ফরম" data-en="Name & Age Correction Form">নাম ও বয়স সংশোধন ফরম</a></li>
+          <li><a href="#" data-bn="টিসি (স্থানান্তর সনদ) ফরম" data-en="TC (Transfer Certificate) Form">টিসি (স্থানান্তর সনদ) ফরম</a></li>
+          <li><a href="#" data-bn="প্রত্যয়নপত্র আবেদন ফরম" data-en="Certificate Application Form">প্রত্যয়নপত্র আবেদন ফরম</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" data-bn="ফলাফল আর্কাইভ" data-en="Result Archive">ফলাফল আর্কাইভ</a>
+        <ul class="dropdown">
+          <li><a href="https://sites.google.com/view/reult/resul_helper" target="_blank" data-bn="রেজাল্ট দেখুন" data-en="View Result">রেজাল্ট দেখুন</a></li>
+          <li><a href="export/pdf.html" data-bn="PDF ডাউনলোড" data-en="Download PDF">PDF ডাউনলোড</a></li>
+          <li><a href="export/excel.html" data-bn="Excel রপ্তানি" data-en="Export to Excel">Excel রপ্তানি</a></li>
+          <li><a href="import.html" data-bn="রেজাল্ট ইম্পোর্ট" data-en="Import Result">রেজাল্ট ইম্পোর্ট</a></li>
+        </ul>
+      </li>
+      <li><a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank" data-bn="ছাত্র নিবন্ধন" data-en="Student Registration">ছাত্র নিবন্ধন</a></li>
+      <li><a href="https://sites.google.com/view/kgcphs-teachers/home" target="_blank" data-bn="শিক্ষক কর্ণার" data-en="Teacher Corner">শিক্ষক কর্ণার</a></li>
+      <li><a href="contact.html" data-bn="যোগাযোগ" data-en="Contact">যোগাযোগ</a></li>
+      <li><a href="https://script.google.com/macros/s/AKfycbwNxf9cQV9qJwZpxf5nJpqGRpa5_26iE7QdcRGdBcwYNS9cYqlYTiULc1b0CkrtuQnt8g/exec" target="_blank" data-bn="লগইন" data-en="Login">লগইন</a></li>
+    </ul>
+  </nav>
+
+  <div class="wrap">
+
+    <aside>
+      <div class="officer-strip">
+        <div class="officer-photos">
+          <div class="card">
+            <div class="ph"><img src="headmaster.jpg" alt="প্রধান শিক্ষক"></div>
+            <span class="role" data-bn="প্রধান শিক্ষক" data-en="Head Teacher">প্রধান শিক্ষক</span>
+          </div>
+          <div class="card">
+            <div class="ph"><img src="assistant-headmaster.jpg" alt="সহকারী প্রধান শিক্ষক"></div>
+            <span class="role" data-bn="সহকারী প্রধান শিক্ষক" data-en="Assistant Head Teacher">সহকারী প্রধান শিক্ষক</span>
+          </div>
+        </div>
+      </div>
+
+      <a class="full-btn" href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank" data-bn="On-line Application" data-en="On-line Application">On-line Application</a>
+      <a class="full-btn" href="https://script.google.com/macros/s/AKfycbxaULoHbIe2sFA6OIhSa-j0GUSn4C6CsBLw5s_JJ1Q-s1i1A430AKp84IqZF0rhR1iX/exec" target="_blank" data-bn="অর্ধবার্ষিক/বার্ষিক পরীক্ষার ফলাফল" data-en="Half Yaly/Annual Exam Result">অর্ধবার্ষিক/বার্ষিক পরীক্ষার ফলাফল</a>
+
+      <div class="quick-badges">
+        <a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><span class="bic c-blue">SMS</span><span data-bn="এস.এম.এস সেবা" data-en="SMS Service">এস.এম.এস সেবা</span></a>
+        <a class="c-green" href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><span class="bic c-green">eTC</span><span data-bn="ই-টিসি" data-en="e-TC">ই-টিসি</span></a>
+        <a href="https://sites.google.com/view/kgcphs-teachers/home" target="_blank"><span class="bic c-red">eCIF</span><span data-bn="ই-সিআইএফ" data-en="e-CIF">ই-সিআইএফ</span></a>
+        <a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><span class="bic c-green">eSIF</span><span data-bn="ই-এসআইএফ" data-en="e-SIF">ই-এসআইএফ</span></a>
+        <a href="https://script.google.com/macros/s/AKfycbw1-qjaENSiW_f3Tw96eYRB9K2rKj73VjSwDgIMTuD7/dev" target="_blank"><span class="bic c-orange">eFF</span><span data-bn="ই-এফএফ" data-en="e-FF">ই-এফএফ</span></a>
+        <a href="certificate.html"><span class="bic c-orange">Cert</span><span data-bn="e-সার্টিফিকেট" data-en="e-Certificate">e-সার্টিফিকেট</span></a>
+        <a href="https://script.google.com/macros/s/AKfycbwzr1PJqslMra9zeeiAuuRfFDL7cEmz5gj8m1H7gKFmd7VWhsb3Kd97sev4eMIlaxAPlg/exec" target="_blank"><span class="bic c-teal">Att</span><span data-bn="উপস্থিতি" data-en="Attendance">উপস্থিতি</span></a>
+        <a href="https://banbeis.gov.bd/" target="_blank"><span class="bic c-purple">GIS</span><span data-bn="GIS তালিকা" data-en="GIS List">GIS তালিকা</span></a>
+      </div>
+
+      <div class="side-box">
+        <h4 data-bn="প্রতিষ্ঠান তালিকা" data-en="Institute List">প্রতিষ্ঠান তালিকা</h4>
+        <ul class="icon-list">
+          <li><a href="https://dhakaeducationboard.gov.bd/" target="_blank" rel="noopener noreferrer"><span class="icon-circle">🏫</span><span data-bn="কলেজ/স্কুল অনুসন্ধান" data-en="College/School Search">কলেজ/স্কুল অনুসন্ধান</span></a></li>
+          <li><a href="https://dhakaeducationboard.gov.bd/" target="_blank" rel="noopener noreferrer"><span class="icon-circle">🏛️</span><span data-bn="বোর্ড অনুসন্ধান" data-en="Board Search">বোর্ড অনুসন্ধান</span></a></li>
+          <li><a href="https://banbeis.gov.bd/" target="_blank" rel="noopener noreferrer"><span class="icon-circle">🔢</span><span data-bn="EIIN সার্ভার" data-en="EIIN Server">EIIN সার্ভার</span></a></li>
+        </ul>
+      </div>
+
+      <div class="side-box">
+        <h4 data-bn="রেজাল্ট অনুসন্ধান ২০২৬" data-en="Result Search 2025">রেজাল্ট অনুসন্ধান ২০২৫</h4>
+        <ul class="icon-list">
+          <li><a href="https://script.google.com/macros/s/AKfycbxaULoHbIe2sFA6OIhSa-j0GUSn4C6CsBLw5s_JJ1Q-s1i1A430AKp84IqZF0rhR1iX/exec" target="_blank"><span class="icon-circle">🔎</span><span data-bn="ফলাফল সার্চ" data-en="Result Search">ফলাফল সার্চ</span></a></li>
+          <li><a href="https://script.google.com/macros/s/AKfycbxaULoHbIe2sFA6OIhSa-j0GUSn4C6CsBLw5s_JJ1Q-s1i1A430AKp84IqZF0rhR1iX/exec" target="_blank"><span class="icon-circle">✔️</span><span data-bn="ফলাফল যাচাই" data-en="Result Verify">ফলাফল যাচাই</span></a></li>
+          <li><a href="#"><span class="icon-circle">📧</span><span data-bn="Web Mail" data-en="Web Mail">Web Mail</span></a></li>
+          <li><a href="contact.html"><span class="icon-circle">📍</span><span data-bn="সেন্টার তথ্য" data-en="Center Information">সেন্টার তথ্য</span></a></li>
+        </ul>
+      </div>
+
+      <div class="side-box">
+        <h4 data-bn="যোগাযোগের তথ্য" data-en="Contact Information">যোগাযোগের তথ্য</h4>
+        <div class="empty">
+          <span data-bn="কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয়" data-en="Kashiani Girish Chandra Pilot High School">কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয়</span><br>
+          <span data-bn="ঠিকানা: কাশিয়ানী, গোপালগঞ্জ" data-en="Address: Kashiani, Gopalganj">ঠিকানা: কাশিয়ানী, গোপালগঞ্জ</span><br>
+          <span data-bn="ইমেইল: info@kgcphs.edu.bd" data-en="Email: info@kgcphs.edu.bd">ইমেইল: info@kgcphs.edu.bd</span><br>
+          <span data-bn="ফোন: 01309109487" data-en="Phone: 01309109487">ফোন: 01309109487</span>
+        </div>
+      </div>
+
+      <div class="side-box">
+        <h4 data-bn="পরীক্ষা নিয়ন্ত্রণ কক্ষ" data-en="Exam Control Room">পরীক্ষা নিয়ন্ত্রণ কক্ষ</h4>
+        <ul>
+          <li><a href="contact.html" data-bn="ফোন ডিরেক্টরি" data-en="Phone Directory">ফোন ডিরেক্টরি</a></li>
+          <li><a href="#" data-bn="মোবাইল অ্যাপ্লিকেশন" data-en="Mobile Applications">মোবাইল অ্যাপ্লিকেশন</a></li>
+        </ul>
+      </div>
+
+      <div class="side-box">
+        <h4 data-bn="প্রশাসন" data-en="Administration">প্রশাসন</h4>
+        <ul>
+          <li><a href="contact.html" data-bn="যোগাযোগ করুন" data-en="Contact Us">যোগাযোগ করুন</a></li>
+          <li><a href="help.html" data-bn="সাহায্য ও গাইড" data-en="Help & Guide">সাহায্য ও গাইড</a></li>
+          <li><a href="settings.html" data-bn="সিস্টেম সেটিংস" data-en="System Settings">সিস্টেম সেটিংস</a></li>
+          <li><a href="import.html" data-bn="রেজাল্ট ইম্পোর্ট" data-en="Import Result">রেজাল্ট ইম্পোর্ট</a></li>
+        </ul>
+      </div>
+
+      <div class="side-box">
+        <h4 data-bn="গুরুত্বপূর্ণ লিংক" data-en="Important Links">গুরুত্বপূর্ণ লিংক</h4>
+        <ul>
+          <li><a href="https://moedu.gov.bd/" target="_blank" data-bn="শিক্ষা মন্ত্রণালয়" data-en="Ministry of Education">শিক্ষা মন্ত্রণালয়</a></li>
+          <li><a href="https://dshe.gov.bd/" target="_blank" data-bn="দপ্তর/অধিদপ্তর" data-en="Departments/Directorates">দপ্তর/অধিদপ্তর</a></li>
+          <li><a href="https://dhakaeducationboard.gov.bd/" target="_blank" data-bn="শিক্ষা বোর্ড" data-en="Education Board">শিক্ষা বোর্ড</a></li>
+          <li><a href="https://www.educationboardresults.gov.bd/" target="_blank" data-bn="বোর্ড ফলাফল সার্ভার" data-en="Board Result Server">বোর্ড ফলাফল সার্ভার</a></li>
+          <li><a href="https://banbeis.gov.bd/" target="_blank">BANBEIS</a></li>
+        </ul>
+      </div>
+
+      <div class="side-box emg-box">
+        <ul>
+          <li><a href="tel:333"><span class="emg-ic c-blue">৩৩৩</span><span data-bn="সরকারি তথ্য ও সেবা" data-en="Govt. Info & Services">সরকারি তথ্য ও সেবা</span></a></li>
+          <li><a href="tel:999"><span class="emg-ic c-red">৯৯৯</span><span data-bn="জরুরি সেবা" data-en="Emergency Service">জরুরি সেবা</span></a></li>
+          <li><a href="tel:109"><span class="emg-ic c-pink">১০৯</span><span data-bn="নারী ও শিশু নির্যাতন প্রতিরোধ" data-en="Women & Child Abuse Prevention">নারী ও শিশু নির্যাতন প্রতিরোধ</span></a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main>
+      <div class="hero-row">
+        <div class="carousel" id="carousel">
+          <div class="slide active">
+            <img src="Sphoto.jpg" alt="বিদ্যালয় ভবন">
+            <div class="cap" data-bn="নাম ও বয়স সংশোধনের আবেদন" data-en="Name & Age Correction Application">নাম ও বয়স সংশোধনের আবেদন</div>
+          </div>
+          <div class="slide">
+            <img src="Sphoto.jpg" alt="ফলাফল সেবা">
+            <div class="cap" data-bn="অনলাইনে রেজাল্ট দেখুন ও ডাউনলোড করুন" data-en="View & Download Results Online">অনলাইনে রেজাল্ট দেখুন ও ডাউনলোড করুন</div>
+          </div>
+          <div class="slide">
+            <img src="Sphoto.jpg" alt="ছাত্র নিবন্ধন">
+            <div class="cap" data-bn="নতুন ছাত্র-ছাত্রী নিবন্ধন (eSIF) চালু হয়েছে" data-en="New Student Registration (eSIF) Now Open">নতুন ছাত্র-ছাত্রী নিবন্ধন (eSIF) চালু হয়েছে</div>
+          </div>
+          <div class="dots">
+            <span class="active" data-i="0"></span>
+            <span data-i="1"></span>
+            <span data-i="2"></span>
+          </div>
+        </div>
+
+        <div class="side-box hero-notice">
+          <h4>
+            <span data-bn="সর্বশেষ নোটিশ" data-en="Latest Notices">সর্বশেষ নোটিশ</span>
+            <span class="notice-nav">
+              <button class="nbtn" onclick="scrollNotice(-1)" aria-label="উপরে স্ক্রল করুন" title="উপরে">▲</button>
+              <button class="nbtn" onclick="scrollNotice(1)" aria-label="নিচে স্ক্রল করুন" title="নিচে">▼</button>
+            </span>
+          </h4>
+          <ul id="noticeList">
+            <li><a href="https://script.google.com/macros/s/AKfycbxaULoHbIe2sFA6OIhSa-j0GUSn4C6CsBLw5s_JJ1Q-s1i1A430AKp84IqZF0rhR1iX/exec" target="_blank"><span data-bn="বার্ষিক পরীক্ষার ফলাফল প্রকাশ" data-en="Annual Exam Result Published">বার্ষিক পরীক্ষার ফলাফল প্রকাশ</span><span class="date">২০২৫</span></a></li>
+            <li><a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><span data-bn="নতুন শিক্ষাবর্ষের ছাত্র নিবন্ধন চলছে" data-en="New Academic Year Student Registration Ongoing">নতুন শিক্ষাবর্ষের ছাত্র নিবন্ধন চলছে</span><span class="date">২০২৫</span></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel">
+        <table class="info-table">
+          <tr>
+            <td><a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><div class="ic c-teal">🎓</div><span data-bn="একাডেমিক কর্ণার" data-en="Name & Age Correction">একাডেমিক কর্ণার</span></a></td>
+            <td><a href="https://sites.google.com/view/reult/resul_helper" target="_blank"><div class="ic c-orange">JSC</div><span data-bn="জুনিয়র বৃত্তি" data-en="জুনিয়র বৃত্তি">জুনিয়র বৃত্তি</span></a></td>
+            <td><a href="https://sites.google.com/view/reult/resul_helper" target="_blank"><div class="ic c-orange">SSC</div><span data-bn="এসএসসি কর্নার" data-en="এসএসসি কর্নার">এসএসসি কর্নার</span></a></td>
+          </tr>
+          <tr>
+            <td><a href="#"><div class="ic c-gold">⚖️</div><span data-bn="প্রশাসনিক আদেশ" data-en="Administrative Orders">প্রশাসনিক আদেশ</span></a></td>
+            <td><a href="#"><div class="ic c-blue">✅</div><span data-bn="বিদ্যালয় সংক্রান্ত আদেশ" data-en="School-related Orders">বিদ্যালয় সংক্রান্ত আদেশ</span></a></td>
+            <td><a href="#"><div class="ic c-cyan">✅</div><span data-bn="নিয়োগ সংক্রান্ত আদেশ" data-en="Recruitment Orders">নিয়োগ সংক্রান্ত আদেশ</span></a></td>
+          </tr>
+          <tr>
+            <td><a href="#"><div class="ic c-green">🤝</div><span data-bn="সেবা প্রদান প্রতিশ্রুতি" data-en="Service Delivery Pledge">সেবা প্রদান প্রতিশ্রুতি</span></a></td>
+            <td><a href="#"><div class="ic c-purple">🎯</div><span data-bn="জাতীয় শুদ্ধাচার কৌশল" data-en="National Integrity Strategy">জাতীয় শুদ্ধাচার কৌশল</span></a></td>
+            <td><a href="#"><div class="ic c-green">✊</div><span data-bn="অভিযোগ প্রতিকার" data-en="Grievance Redress">অভিযোগ প্রতিকার</span></a></td>
+          </tr>
+          <tr>
+            <td><a href="#"><div class="ic c-green">👥</div><span data-bn="বার্ষিক কর্মসম্পাদন চুক্তি" data-en="Annual Performance Agreement">বার্ষিক কর্মসম্পাদন চুক্তি</span></a></td>
+            <td><a href="#"><div class="ic c-purple">🧬</div><span data-bn="তথ্য অধিকার" data-en="Right to Information">তথ্য অধিকার</span></a></td>
+            <td><a href="#"><div class="ic c-cyan">🧬</div><span data-bn="উদ্ভাবনী কার্যক্রম" data-en="Innovation Activities">উদ্ভাবনী কার্যক্রম</span></a></td>
+          </tr>
+          <tr>
+            <td><a href="#"><div class="ic c-red">👨‍👩‍👧</div><span data-bn="নাগরিক সনদ" data-en="Citizen Charter">নাগরিক সনদ</span></a></td>
+            <td><a href="#"><div class="ic c-green">🔄</div><span data-bn="বাজেট ও চলমান পরিকল্পনা" data-en="Budget & Ongoing Planning">বাজেট ও চলমান পরিকল্পনা</span></a></td>
+            <td><a href="#"><div class="ic c-purple">🤝</div><span data-bn="প্রতিষ্ঠার নথি" data-en="Founding Documents">প্রতিষ্ঠার নথি</span></a></td>
+          </tr>
+        </table>
+      </div>
+    </main>
+
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <h5 data-bn="প্রাসঙ্গিক" data-en="Relevant">প্রাসঙ্গিক</h5>
+        <ul>
+          <li><a href="https://moedu.gov.bd/" target="_blank" data-bn="শিক্ষা মন্ত্রণালয়" data-en="Ministry of Education">শিক্ষা মন্ত্রণালয়</a></li>
+          <li><a href="https://dshe.gov.bd/" target="_blank" data-bn="মাধ্যমিক ও উচ্চশিক্ষা অধিদপ্তর" data-en="Directorate of Secondary & Higher Education">মাধ্যমিক ও উচ্চশিক্ষা অধিদপ্তর</a></li>
+          <li><a href="https://dhakaeducationboard.gov.bd/" target="_blank" data-bn="ঢাকা শিক্ষা বোর্ড" data-en="Dhaka Education Board">ঢাকা শিক্ষা বোর্ড</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 data-bn="কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয়" data-en="Kashiani Girish Chandra Pilot High School">কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয়</h5>
+        <p data-bn="কাশিয়ানী, গোপালগঞ্জ" data-en="Kashiani, Gopalganj">কাশিয়ানী, গোপালগঞ্জ</p>
+        <p data-bn="ইমেইল: info@kgcphs.edu.bd" data-en="Email: info@kgcphs.edu.bd">ইমেইল: info@kgcphs.edu.bd</p>
+        <p data-bn="ফোন: 01309109487" data-en="Phone: 01309109487">ফোন: 01309109487</p>
+      </div>
+      <div>
+        <h5 data-bn="দ্রুত লিংক" data-en="Quick Links">দ্রুত লিংক</h5>
+        <ul>
+          <li><a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank" data-bn="ছাত্র নিবন্ধন" data-en="Student Registration">ছাত্র নিবন্ধন</a></li>
+          <li><a href="https://sites.google.com/view/kgcphs-teachers/home" target="_blank" data-bn="শিক্ষক কর্ণার" data-en="Teacher Corner">শিক্ষক কর্ণার</a></li>
+          <li><a href="Transcript.html" data-bn="ট্রান্সক্রিপ্ট" data-en="Transcript">ট্রান্সক্রিপ্ট</a></li>
+          <li><a href="certificate.html" data-bn="সার্টিফিকেট" data-en="Certificate">সার্টিফিকেট</a></li>
+          <li><a href="analytics.html" data-bn="বিশ্লেষণ" data-en="Analytics">বিশ্লেষণ</a></li>
+        </ul>
+      </div>
+      <div class="social-box">
+        <h5 data-bn="সামাজিক যোগাযোগ" data-en="Social Communication">সামাজিক যোগাযোগ</h5>
+        <ul>
+          <li><a href="#"><span class="social-ic c-fb">📘</span><span data-bn="Facebook" data-en="Facebook">Facebook</span></a></li>
+          <li><a href="#"><span class="social-ic c-yt">▶️</span><span data-bn="YouTube" data-en="YouTube">YouTube</span></a></li>
+          <li><a href="#"><span class="social-ic c-oc">💻</span><span data-bn="অনলাইন ক্লাস" data-en="Online Class">অনলাইন ক্লাস</span></a></li>
+          <li><a href="#"><span class="social-ic c-an">📢</span><span data-bn="ঘোষণা" data-en="Announcement">ঘোষণা</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-bn="© ২০২৫ কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয় — সর্বস্বত্ব সংরক্ষিত" data-en="© 2025 Kashiani Girish Chandra Pilot High School — All Rights Reserved">&copy; ২০২৫ কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয় — সর্বস্বত্ব সংরক্ষিত</span>
+      <span data-bn="তথ্য ও যোগাযোগ প্রযুক্তি বিভাগ কর্তৃক পরিচালিত" data-en="Operated by the ICT Department">তথ্য ও যোগাযোগ প্রযুক্তি বিভাগ কর্তৃক পরিচালিত</span>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const slides = document.querySelectorAll('#carousel .slide');
+      const dots = document.querySelectorAll('#carousel .dots span');
+      let i = 0;
+      function show(n){
+        slides.forEach(s => s.classList.remove('active'));
+        dots.forEach(d => d.classList.remove('active'));
+        slides[n].classList.add('active');
+        dots[n].classList.add('active');
+        i = n;
+      }
+      dots.forEach(d => d.addEventListener('click', () => show(parseInt(d.dataset.i))));
+      setInterval(() => show((i + 1) % slides.length), 4500);
+    })();
+
+    function scrollNotice(direction){
+      const list = document.getElementById('noticeList');
+      if(!list) return;
+      list.scrollBy({ top: direction * 60, behavior: 'smooth' });
+    }
+
+    (function(){
+      const bnBtn = document.getElementById('lang-bn');
+      const enBtn = document.getElementById('lang-en');
+      const nodes = document.querySelectorAll('[data-bn][data-en]');
+
+      function setLang(lang){
+        nodes.forEach(el => {
+          el.textContent = (lang === 'en') ? el.getAttribute('data-en') : el.getAttribute('data-bn');
+        });
+        document.documentElement.lang = lang;
+        if (lang === 'en') {
+          enBtn.classList.add('active');
+          bnBtn.classList.remove('active');
+        } else {
+          bnBtn.classList.add('active');
+          enBtn.classList.remove('active');
+        }
+      }
+
+      bnBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        setLang('bn');
+      });
+      enBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        setLang('en');
+      });
+    })();
+  </script>
+
+</body>
+</html>
