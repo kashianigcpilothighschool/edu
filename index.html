@@ -153,8 +153,8 @@
     object-fit:cover;
     border-radius:50%;
   }
-  .officer-photos .card .name{ font-size:14px; color:var(--text); font-weight:700; }
-  .officer-photos .card .role{ font-size:13px; color:var(--green-dark); font-weight:600; }
+  .officer-photos .card .name{ font-size:12.5px; color:var(--text); font-weight:700; }
+  .officer-photos .card .role{ font-size:11.5px; color:var(--green-dark); font-weight:600; }
 
   .admin-login{
     background:var(--green-dark);
@@ -329,7 +329,7 @@
 
   .panel{ background:#fff; border:1px solid var(--border); margin-top:18px; }
   .panel h3{
-    background:var(--green-dark); color:#fff; font-size:15px;
+    background:var(--green-dark); color:#fff; font-size:13.5px;
     padding:8px 14px; letter-spacing:.3px;
     display:flex; justify-content:space-between; align-items:center;
   }
@@ -344,7 +344,7 @@
   }
   table.info-table td a{
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
-    text-decoration:none; color:var(--text); font-size:22px; font-weight:700;
+    text-decoration:none; color:var(--text); font-size:18px; font-weight:700;
     background:#fff;
     border:1px solid var(--border);
     border-radius:18px;
@@ -366,7 +366,9 @@
     color:#fff;
     font-weight:800;
     box-shadow:inset 0 0 0 1px rgba(0,0,0,0.05);
+    overflow:hidden;
   }
+  table.info-table .ic img{ width:100%; height:100%; object-fit:cover; border-radius:50%; }
   table.info-table .ic.c-orange{ background:#fdae3d; }
   table.info-table .ic.c-teal{ background:#3fa9e0; }
   table.info-table .ic.c-blue{ background:#3d7fd8; }
@@ -379,16 +381,16 @@
 
   .side-box{ background:#fff; border:1px solid var(--border); margin-bottom:18px; }
   .side-box h4{
-    background:var(--green); color:#fff; font-size:14px; padding:7px 12px;
+    background:var(--green); color:#fff; font-size:12.5px; padding:7px 12px;
     display:flex; justify-content:space-between; align-items:center;
   }
   .side-box h4 .refresh{ font-size:12.5px; font-weight:400; opacity:.85; }
   .side-box ul{ list-style:none; }
   .side-box li{ border-bottom:1px solid var(--border); }
-  .side-box a{ display:block; text-decoration:none; color:var(--text); font-size:14.5px; padding:7px 12px; }
+  .side-box a{ display:block; text-decoration:none; color:var(--text); font-size:13px; padding:6px 12px; }
   .side-box a:hover{ background:var(--green-light); color:var(--green-dark); }
-  .side-box .date{ display:block; font-size:12.5px; color:var(--muted); margin-top:2px; }
-  .side-box .empty{ padding:12px; font-size:14px; color:var(--muted); }
+  .side-box .date{ display:block; font-size:11.5px; color:var(--muted); margin-top:2px; }
+  .side-box .empty{ padding:12px; font-size:12.5px; color:var(--muted); }
 
   .notice-nav{ display:flex; gap:4px; }
   .notice-nav .nbtn{
@@ -413,7 +415,7 @@
     display:flex; align-items:center; gap:6px;
     text-decoration:none;
     color:var(--green-dark);
-    font-size:13px;
+    font-size:11.5px;
     font-weight:700;
     padding:6px 8px;
     border-right:1px solid var(--border);
@@ -444,7 +446,7 @@
     background:var(--green);
     color:#fff;
     text-decoration:none;
-    font-size:14.5px;
+    font-size:13px;
     font-weight:700;
     padding:8px;
     border:1px solid var(--green-dark);
@@ -606,7 +608,7 @@
       <li><a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank" data-bn="ছাত্র নিবন্ধন" data-en="Student Registration">ছাত্র নিবন্ধন</a></li>
       <li><a href="https://sites.google.com/view/kgcphs-teachers/home" target="_blank" data-bn="শিক্ষক কর্ণার" data-en="Teacher Corner">শিক্ষক কর্ণার</a></li>
       <li><a href="contact.html" data-bn="যোগাযোগ" data-en="Contact">যোগাযোগ</a></li>
-      <li><a href="https://script.google.com/macros/s/AKfycbwNxf9cQV9qJwZpxf5nJpqGRpa5_26iE7QdcRGdBcwYNS9cYqlYTiULc1b0CkrtuQnt8g/exec" target="_blank" data-bn="লগইন" data-en="Login">লগইন</a></li>
+      <li><a href="https://script.google.com/macros/s/AKfycby0UONInMxSOz0JA3hLv8wq8KGeAtY0lQNG_yCjT8xpY8uGbgQkqN8rPCKS8VcNYo0FQA/exec" target="_blank" data-bn="লগইন" data-en="Login">লগইন</a></li>
     </ul>
   </nav>
 
@@ -616,21 +618,21 @@
       <div class="officer-strip">
         <div class="officer-photos">
           <div class="card">
-            <div class="ph"><img src="headmaster.jpg" alt="প্রধান শিক্ষক"></div>
+            <div class="ph"><img src="প্রধান শিক্ষক.jpg" alt="প্রধান শিক্ষক"></div>
             <span class="role" data-bn="প্রধান শিক্ষক" data-en="Head Teacher">প্রধান শিক্ষক</span>
           </div>
           <div class="card">
-            <div class="ph"><img src="assistant-headmaster.jpg" alt="সহকারী প্রধান শিক্ষক"></div>
+            <div class="ph"><img src="সহকারি প্রধান শিক্ষক.jpg" alt="সহকারী প্রধান শিক্ষক"></div>
             <span class="role" data-bn="সহকারী প্রধান শিক্ষক" data-en="Assistant Head Teacher">সহকারী প্রধান শিক্ষক</span>
           </div>
         </div>
       </div>
 
       <a class="full-btn" href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank" data-bn="On-line Application" data-en="On-line Application">On-line Application</a>
-      <a class="full-btn" href="https://script.google.com/macros/s/AKfycbxaULoHbIe2sFA6OIhSa-j0GUSn4C6CsBLw5s_JJ1Q-s1i1A430AKp84IqZF0rhR1iX/exec" target="_blank" data-bn="অর্ধবার্ষিক/বার্ষিক পরীক্ষার ফলাফল" data-en="Half Yaly/Annual Exam Result">অর্ধবার্ষিক/বার্ষিক পরীক্ষার ফলাফল</a>
+      <a class="full-btn" href="https://script.google.com/macros/s/AKfycbxaULoHbIe2sFA6OIhSa-j0GUSn4C6CsBLw5s_JJ1Q-s1i1A430AKp84IqZF0rhR1iX/exec" target="_blank" data-bn="পরীক্ষার ফলাফল" data-en="Exam Result">পরীক্ষার ফলাফল</a>
 
       <div class="quick-badges">
-        <a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><span class="bic c-blue">SMS</span><span data-bn="এস.এম.এস সেবা" data-en="SMS Service">এস.এম.এস সেবা</span></a>
+        <a href="https://script.google.com/macros/s/AKfycbyp7VsXkTEnc60OahRSrb1vqgQk5RH91GBMneQT6SsNp4FKfwBXHrFOvnTTiaqDN_3B6g/exec" target="_blank"><span class="bic c-blue">CL</span><span data-bn="সিএল এপ্লিকেশন" data-en="CL Application">সিএল এপ্লিকেশন</span></a>
         <a class="c-green" href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><span class="bic c-green">eTC</span><span data-bn="ই-টিসি" data-en="e-TC">ই-টিসি</span></a>
         <a href="https://sites.google.com/view/kgcphs-teachers/home" target="_blank"><span class="bic c-red">eCIF</span><span data-bn="ই-সিআইএফ" data-en="e-CIF">ই-সিআইএফ</span></a>
         <a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><span class="bic c-green">eSIF</span><span data-bn="ই-এসআইএফ" data-en="e-SIF">ই-এসআইএফ</span></a>
@@ -712,7 +714,7 @@
         <div class="carousel" id="carousel">
           <div class="slide active">
             <img src="Sphoto.jpg" alt="বিদ্যালয় ভবন">
-            <div class="cap" data-bn="নাম ও বয়স সংশোধনের আবেদন" data-en="Name & Age Correction Application">নাম ও বয়স সংশোধনের আবেদন</div>
+            <div class="cap" data-bn="জুনিয়র বৃত্তি পরীক্ষা" data-en="Junior Scholarship Examination">জুনিয়র বৃত্তি পরীক্ষা</div>
           </div>
           <div class="slide">
             <img src="Sphoto.jpg" alt="ফলাফল সেবা">
@@ -747,9 +749,9 @@
       <div class="panel">
         <table class="info-table">
           <tr>
-            <td><a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><div class="ic c-teal">🎓</div><span data-bn="একাডেমিক কর্ণার" data-en="Name & Age Correction">একাডেমিক কর্ণার</span></a></td>
-            <td><a href="https://sites.google.com/view/reult/resul_helper" target="_blank"><div class="ic c-orange">JSC</div><span data-bn="জুনিয়র বৃত্তি" data-en="জুনিয়র বৃত্তি">জুনিয়র বৃত্তি</span></a></td>
-            <td><a href="https://sites.google.com/view/reult/resul_helper" target="_blank"><div class="ic c-orange">SSC</div><span data-bn="এসএসসি কর্নার" data-en="এসএসসি কর্নার">এসএসসি কর্নার</span></a></td>
+            <td><a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><div class="ic c-teal"><img src="academic-corner.png" alt="একাডেমিক কর্ণার"></div><span data-bn="একাডেমিক কর্ণার" data-en="Academic Corner">একাডেমিক কর্ণার</span></a></td>
+            <td><a href="https://sites.google.com/view/reult/resul_helper" target="_blank"><div class="ic c-orange"><img src="junior-scholarship.png" alt="জুনিয়র বৃত্তি"></div><span data-bn="জুনিয়র বৃত্তি" data-en="জুনিয়র বৃত্তি">জুনিয়র বৃত্তি</span></a></td>
+            <td><a href="https://sites.google.com/view/reult/resul_helper" target="_blank"><div class="ic c-orange"><img src="ssc.png" alt="এসএসসি কর্নার"></div><span data-bn="এসএসসি কর্নার" data-en="এসএসসি কর্নার">এসএসসি কর্নার</span></a></td>
           </tr>
           <tr>
             <td><a href="#"><div class="ic c-gold">⚖️</div><span data-bn="প্রশাসনিক আদেশ" data-en="Administrative Orders">প্রশাসনিক আদেশ</span></a></td>
