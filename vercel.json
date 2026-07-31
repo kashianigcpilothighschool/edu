@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/leave-application",
+      "destination": "https://cl-sepia.vercel.app"
+    },
+    {
+      "source": "/leave-application/:path*",
+      "destination": "https://cl-sepia.vercel.app/:path*"
+    }
+  ]
+}
