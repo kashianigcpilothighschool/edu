@@ -139,12 +139,12 @@
     text-align:center;
   }
   .officer-photos .ph{
-    width:52px; height:52px;
+    width:110px; height:110px;
     border-radius:50%;
-    border:2px solid #3fa9e0;
+    border:3px solid #3fa9e0;
     background:#fff;
     display:flex; align-items:center; justify-content:center;
-    font-size:17.5px;
+    font-size:36px;
     flex-shrink:0;
     overflow:hidden;
   }
@@ -361,14 +361,16 @@
     border-color:var(--gold);
   }
   table.info-table .ic{
-    width:100px; height:100px; border-radius:50%;
+    width:100px; height:100px; border-radius:12px;
     display:flex; align-items:center; justify-content:center; font-size:40px;
     color:#fff;
     font-weight:800;
     box-shadow:inset 0 0 0 1px rgba(0,0,0,0.05);
     overflow:hidden;
   }
-  table.info-table .ic img{ width:100%; height:100%; object-fit:cover; border-radius:50%; }
+  table.info-table .ic img{ width:100%; height:100%; object-fit:cover; border-radius:12px; }
+  table.info-table .ic.rect{ border-radius:12px; }
+  table.info-table .ic.rect img{ border-radius:8px; }
   table.info-table .ic.c-orange{ background:#fdae3d; }
   table.info-table .ic.c-teal{ background:#3fa9e0; }
   table.info-table .ic.c-blue{ background:#3d7fd8; }
@@ -431,6 +433,7 @@
     font-size:11px;
     font-weight:800;
     color:#fff;
+    overflow:hidden;
   }
   .quick-badges .bic.c-blue{ background:#3d7fd8; }
   .quick-badges .bic.c-green{ background:#3fb56a; }
@@ -453,6 +456,8 @@
     margin-bottom:6px;
   }
   .full-btn:hover{ background:var(--green-dark); }
+  .full-btn.white-btn{ background:#fff; color:var(--green-dark); border-color:var(--green-dark); }
+  .full-btn.white-btn:hover{ background:var(--green-light); color:var(--green-dark); }
 
   .side-box ul.icon-list li{ border-bottom:1px solid var(--border); }
   .side-box ul.icon-list a{
@@ -619,20 +624,21 @@
         <div class="officer-photos">
           <div class="card">
             <div class="ph"><img src="প্রধান শিক্ষক.jpg" alt="প্রধান শিক্ষক"></div>
+            <span class="name">নূর আলম তালুকদার</span>
             <span class="role" data-bn="প্রধান শিক্ষক" data-en="Head Teacher">প্রধান শিক্ষক</span>
           </div>
           <div class="card">
             <div class="ph"><img src="সহকারি প্রধান শিক্ষক.jpg" alt="সহকারী প্রধান শিক্ষক"></div>
+            <span class="name">ইন্দ্রজিৎ কুমার কুন্ডু</span>
             <span class="role" data-bn="সহকারী প্রধান শিক্ষক" data-en="Assistant Head Teacher">সহকারী প্রধান শিক্ষক</span>
           </div>
         </div>
       </div>
 
-      <a class="full-btn" href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank" data-bn="On-line Application" data-en="On-line Application">On-line Application</a>
-      <a class="full-btn" href="https://script.google.com/macros/s/AKfycbxaULoHbIe2sFA6OIhSa-j0GUSn4C6CsBLw5s_JJ1Q-s1i1A430AKp84IqZF0rhR1iX/exec" target="_blank" data-bn="পরীক্ষার ফলাফল" data-en="Exam Result">পরীক্ষার ফলাফল</a>
+      <a class="full-btn white-btn" href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank" data-bn="On-line Application" data-en="On-line Application">On-line Application</a>
 
       <div class="quick-badges">
-        <a href="https://script.google.com/macros/s/AKfycbyp7VsXkTEnc60OahRSrb1vqgQk5RH91GBMneQT6SsNp4FKfwBXHrFOvnTTiaqDN_3B6g/exec" target="_blank"><span class="bic c-blue">CL</span><span data-bn="সিএল এপ্লিকেশন" data-en="CL Application">সিএল এপ্লিকেশন</span></a>
+        <a href="https://cl-sepia.vercel.app/" target="_blank"><span class="bic c-blue"><img src="ecl-icon.png" alt="eCL" style="width:100%;height:100%;object-fit:cover;border-radius:3px;"></span><span data-bn="ই-সিএল এপ্লিকেশন" data-en="e-CL Application">ই-সিএল এপ্লিকেশন</span></a>
         <a class="c-green" href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><span class="bic c-green">eTC</span><span data-bn="ই-টিসি" data-en="e-TC">ই-টিসি</span></a>
         <a href="https://sites.google.com/view/kgcphs-teachers/home" target="_blank"><span class="bic c-red">eCIF</span><span data-bn="ই-সিআইএফ" data-en="e-CIF">ই-সিআইএফ</span></a>
         <a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><span class="bic c-green">eSIF</span><span data-bn="ই-এসআইএফ" data-en="e-SIF">ই-এসআইএফ</span></a>
@@ -750,7 +756,7 @@
         <table class="info-table">
           <tr>
             <td><a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><div class="ic c-teal"><img src="academic-corner.png" alt="একাডেমিক কর্ণার"></div><span data-bn="একাডেমিক কর্ণার" data-en="Academic Corner">একাডেমিক কর্ণার</span></a></td>
-            <td><a href="https://sites.google.com/view/reult/resul_helper" target="_blank"><div class="ic c-orange"><img src="junior-scholarship.png" alt="জুনিয়র বৃত্তি"></div><span data-bn="জুনিয়র বৃত্তি" data-en="জুনিয়র বৃত্তি">জুনিয়র বৃত্তি</span></a></td>
+            <td><a href="https://sites.google.com/view/reult/resul_helper" target="_blank"><div class="ic c-orange rect"><img src="junior-scholarship.png" alt="জুনিয়র বৃত্তি"></div><span data-bn="জুনিয়র বৃত্তি" data-en="জুনিয়র বৃত্তি">জুনিয়র বৃত্তি</span></a></td>
             <td><a href="https://sites.google.com/view/reult/resul_helper" target="_blank"><div class="ic c-orange"><img src="ssc.png" alt="এসএসসি কর্নার"></div><span data-bn="এসএসসি কর্নার" data-en="এসএসসি কর্নার">এসএসসি কর্নার</span></a></td>
           </tr>
           <tr>
