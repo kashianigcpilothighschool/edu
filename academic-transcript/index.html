@@ -468,26 +468,38 @@
             gap: 10px;
             margin-bottom: 20px;
             padding-bottom: 16px;
-            border-bottom: 2px solid #0e7a38;
             position: relative;
         }
         
         /* --- NEW CSS FOR LOGO --- */
+        .header-logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+        }
+
         .print-logo {
-            width: 72px;
-            height: 72px;
+            width: 96px;
+            height: 96px;
             flex-shrink: 0;
             border-radius: 0;
             border: 2px solid #0e7a38;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            order: 1;
         }
 
-        .school-details {
-            text-align: center;
-            display: contents;
+        .serial-no-box {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: left;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #000;
         }
         /* --- END OF NEW CSS --- */
 
@@ -510,7 +522,6 @@
             margin: 6px 0 2px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            order: 0;
         }
 
         .transcript-header h3 {
@@ -518,18 +529,15 @@
             font-weight: 500;
             color: #34495e;
             margin: 2px 0;
-            order: 3;
         }
 
-        .school-details h3:last-of-type {
+        .transcript-header h3.transcript-title {
             font-size: 15px;
             font-weight: 700;
             color: #0e7a38;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            text-decoration: underline;
             margin-top: 6px;
-            order: 2;
         }
 
         table {
@@ -616,6 +624,7 @@
             font-size: 11px;
             width: 190px;
             flex-shrink: 0;
+            align-self: flex-start;
             border-radius: 0;
             overflow: hidden;
             box-shadow: none;
@@ -886,11 +895,27 @@
             /* Make sure the logo is visible on print */
             .print-logo {
                 display: block !important;
-                width: 58px !important;
-                height: 58px !important;
+                width: 80px !important;
+                height: 80px !important;
                 border-radius: 0 !important;
                 border: 1px solid #000 !important;
-                order: 1 !important;
+            }
+
+            .header-logo-row {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                position: relative !important;
+                width: 100% !important;
+            }
+
+            .serial-no-box {
+                position: absolute !important;
+                left: 0 !important;
+                top: 50% !important;
+                transform: translateY(-50%) !important;
+                text-align: left !important;
+                font-size: 9pt !important;
             }
             
             .container {
@@ -947,14 +972,8 @@
                 text-align: center !important;
                 margin-bottom: 8px !important;
                 padding-bottom: 6px !important;
-                border-bottom: 2px solid #000 !important;
                 page-break-inside: avoid !important;
                 page-break-after: avoid !important;
-            }
-            
-            .school-details {
-                text-align: center !important;
-                display: contents !important;
             }
 
             .transcript-header h2 {
@@ -962,7 +981,6 @@
                 font-weight: bold !important;
                 margin: 0 0 2px 0 !important;
                 color: #000 !important;
-                order: 0 !important;
             }
 
             .transcript-header h3 {
@@ -970,11 +988,6 @@
                 font-weight: normal !important;
                 margin: 1px 0 !important;
                 color: #000 !important;
-                order: 3 !important;
-            }
-
-            .school-details h3:last-of-type {
-                order: 2 !important;
             }
 
             .student-info-section {
@@ -1008,6 +1021,7 @@
 
             .grade-scale {
                 flex-shrink: 0;
+                align-self: flex-start;
                 width: 170px !important;
                 font-size: 8pt !important;
                 border: 1px solid #000 !important;
@@ -1042,6 +1056,10 @@
                 border-collapse: collapse !important;
                 font-size: 9.5pt !important;
                 border: 1px solid #000 !important;
+            }
+
+            .main-content-wrapper .info-table {
+                border: none !important;
             }
 
             .main-content-wrapper thead { display: table-header-group !important; }
@@ -1149,10 +1167,7 @@
     <div class="watermark"></div>
 
     <div class="header-section">
-        <a href="https://kashiani1.pages.dev/" class="back-home"><i class="fas fa-arrow-left"></i>&nbsp; হোম পেজে ফিরুন</a>
-        <div class="logo-area">
-            <div class="school-logo" style="background-image:url('images/school-logo.jpg'); background-size:cover; background-position:center;"></div>
-        </div>
+        <a href="https://edu-kashianigcpilothighschool.vercel.app/" class="back-home"><i class="fas fa-arrow-left"></i>&nbsp; হোম পেজে ফিরুন</a>
         <h1 class="main-title">WEB BASED RESULT PUBLICATION SYSTEM</h1>
         <p class="school-name">KASHIANI GIRISH CHANDRA PILOT HIGH SCHOOL</p>
     </div>
@@ -1343,14 +1358,15 @@
             let html = `
             <div class="container">
                 <div class="transcript-header">
-                    <!-- This div will now hold the logo as a background image -->
-                    <div class="print-logo" style="background-image: url('${logoBase64}');"></div>
-                    
-                    <div class="school-details">
-                        <h2>KASHIANI GIRISH CHANDRA PILOT HIGH SCHOOL</h2>
-                        <h3>${data.examName}</h3>
-                        <h3>ACADEMIC TRANSCRIPT</h3>
+                    <h2>KASHIANI GIRISH CHANDRA PILOT HIGH SCHOOL</h2>
+
+                    <div class="header-logo-row">
+                        <div class="serial-no-box"><strong>Serial No. :</strong> </div>
+                        <div class="print-logo" style="background-image: url('${logoBase64}');"></div>
                     </div>
+
+                    <h3 class="transcript-title">ACADEMIC TRANSCRIPT</h3>
+                    <h3 class="exam-name">${data.examName}</h3>
                 </div>
 
                 <div class="main-content-wrapper">
@@ -1360,10 +1376,8 @@
     <tr><td><strong>Name of Student :</strong> ${info.name}</td></tr>
     <tr><td><strong>Father's Name :</strong> ${info.father}</td></tr>
     <tr><td><strong>Mother's Name :</strong> ${info.mother}</td></tr>
-    <tr><td><strong>Roll No. :</strong> ${info.roll}</td></tr>
-    <tr><td><strong>Reg. No. :</strong> </td></tr>
-    <tr><td><strong>Section :</strong> ${info.section}</td></tr>
-    <tr><td><strong>Type :</strong> Regular</td></tr>
+    <tr><td><strong>Roll No. :</strong> ${info.roll}&nbsp;&nbsp;&nbsp;&nbsp;<strong>Reg. No. :</strong> </td></tr>
+    <tr><td><strong>Section :</strong> ${info.section}&nbsp;&nbsp;&nbsp;&nbsp;<strong>Type :</strong> Regular</td></tr>
     <tr><td><strong>Name of Institution :</strong> KASHIANI GIRISH CHANDRA PILOT HIGH SCHOOL</td></tr>
 </table>
                         </div>
