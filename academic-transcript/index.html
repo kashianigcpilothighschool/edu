@@ -537,6 +537,7 @@
             color: #0e7a38;
             text-transform: uppercase;
             letter-spacing: 1.5px;
+            text-decoration: underline;
             margin-top: 6px;
         }
 
@@ -581,11 +582,8 @@
         }
 
         .student-info-section {
-            display: flex;
-            gap: 18px;
             margin-bottom: 20px;
             margin-top: 18px;
-            align-items: stretch;
         }
 
         .info-content {
@@ -621,14 +619,16 @@
         }
 
         .grade-scale {
-            font-size: 11px;
-            width: 190px;
-            flex-shrink: 0;
-            align-self: flex-start;
+            position: absolute;
+            right: 0;
+            top: 78%;
+            transform: translateY(-50%);
+            font-size: 8px;
+            width: 130px;
             border-radius: 0;
             overflow: hidden;
             box-shadow: none;
-            border: 1.5px solid #000;
+            border: 1px solid #000;
             background: white;
         }
 
@@ -640,9 +640,9 @@
 
         .grade-scale th,
         .grade-scale td {
-            padding: 5px 6px;
+            padding: 2px 4px;
             border: 1px solid #999;
-            font-size: 10.5px;
+            font-size: 8px;
         }
 
         .grade-scale th {
@@ -834,13 +834,26 @@
                 gap: 15px;
             }
 
+            .header-logo-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+
             .print-logo {
                  width: 70px;
                  height: 70px;
             }
+
+            .serial-no-box {
+                position: static;
+                transform: none;
+                text-align: center;
+            }
             /* --- End responsive style for logo --- */
 
             .grade-scale {
+                position: static;
+                transform: none;
                 width: 100%;
                 margin-top: 20px;
                 animation: none;
@@ -991,9 +1004,6 @@
             }
 
             .student-info-section {
-                display: flex !important;
-                justify-content: space-between;
-                gap: 12px;
                 margin-bottom: 8px !important;
                 page-break-inside: avoid !important;
             }
@@ -1020,10 +1030,12 @@
             }
 
             .grade-scale {
-                flex-shrink: 0;
-                align-self: flex-start;
-                width: 170px !important;
-                font-size: 8pt !important;
+                position: absolute !important;
+                right: 0 !important;
+                top: 78% !important;
+                transform: translateY(-50%) !important;
+                width: 130px !important;
+                font-size: 7pt !important;
                 border: 1px solid #000 !important;
                 background: white !important;
                 box-shadow: none !important;
@@ -1032,9 +1044,9 @@
             }
             
             .grade-scale th, .grade-scale td {
-                padding: 2px !important;
+                padding: 1.5px !important;
                 border: 1px solid #000 !important;
-                font-size: 8pt !important;
+                font-size: 7pt !important;
                 text-align: center;
             }
 
@@ -1363,6 +1375,18 @@
                     <div class="header-logo-row">
                         <div class="serial-no-box"><strong>Serial No. :</strong> </div>
                         <div class="print-logo" style="background-image: url('${logoBase64}');"></div>
+                        <div class="grade-scale">
+                            <table>
+                                <tr><th>Grade</th><th>Marks</th><th>GPA</th></tr>
+                                <tr><td>A+</td><td>80–100</td><td>5.00</td></tr>
+                                <tr><td>A</td><td>70–79</td><td>4.00</td></tr>
+                                <tr><td>A-</td><td>60–69</td><td>3.50</td></tr>
+                                <tr><td>B</td><td>50–59</td><td>3.00</td></tr>
+                                <tr><td>C</td><td>40–49</td><td>2.00</td></tr>
+                                <tr><td>D</td><td>33–39</td><td>1.00</td></tr>
+                                <tr><td>F</td><td>0–32</td><td>0.00</td></tr>
+                            </table>
+                        </div>
                     </div>
 
                     <h3 class="transcript-title">ACADEMIC TRANSCRIPT</h3>
@@ -1380,18 +1404,6 @@
     <tr><td><strong>Section :</strong> ${info.section}&nbsp;&nbsp;&nbsp;&nbsp;<strong>Type :</strong> Regular</td></tr>
     <tr><td><strong>Name of Institution :</strong> KASHIANI GIRISH CHANDRA PILOT HIGH SCHOOL</td></tr>
 </table>
-                        </div>
-                        <div class="grade-scale">
-                            <table>
-                                <tr><th>Grade</th><th>Marks</th><th>GPA</th></tr>
-                                <tr><td>A+</td><td>80–100</td><td>5.00</td></tr>
-                                <tr><td>A</td><td>70–79</td><td>4.00</td></tr>
-                                <tr><td>A-</td><td>60–69</td><td>3.50</td></tr>
-                                <tr><td>B</td><td>50–59</td><td>3.00</td></tr>
-                                <tr><td>C</td><td>40–49</td><td>2.00</td></tr>
-                                <tr><td>D</td><td>33–39</td><td>1.00</td></tr>
-                                <tr><td>F</td><td>0–32</td><td>0.00</td></tr>
-                            </table>
                         </div>
                     </div>
 
