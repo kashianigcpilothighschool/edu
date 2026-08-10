@@ -1283,7 +1283,7 @@
             return className === 'Nine' || className === 'Ten';
         }
 
-        // ✅ Reg. No. তৈরির জন্য ক্লাসের ২-ডিজিট কোড
+        // ✅ Registration No. তৈরির জন্য ক্লাসের ২-ডিজিট কোড
         const CLASS_CODE = {
             'Six': '06',
             'Seven': '07',
@@ -1379,7 +1379,7 @@
             const subjects = data.subjects;
             const additional = data.additional || [];
 
-            // ✅ Reg. No. = সেশনের সালের শেষ ২ ডিজিট + ক্লাসের ২ ডিজিট + রোলের ৩ ডিজিট
+            // ✅ Registration No. = সেশনের সালের শেষ ২ ডিজিট + ক্লাসের ২ ডিজিট + রোলের ৩ ডিজিট
             const sessionStr = (info.session || '').toString();
             const sessionYearMatch = sessionStr.match(/\d{4}/);
             const yy = sessionYearMatch ? sessionYearMatch[0].slice(-2) : sessionStr.slice(-2);
@@ -1423,8 +1423,8 @@
     <tr><td><strong>Name of Student :</strong> ${info.name}</td></tr>
     <tr><td><strong>Father's Name :</strong> ${info.father}</td></tr>
     <tr><td><strong>Mother's Name :</strong> ${info.mother}</td></tr>
-    <tr><td style="display:flex; align-items:center;"><span><strong>Roll No. :</strong> ${info.roll}</span><span style="flex:1; text-align:center;"><strong>Reg. No. :</strong> ${regNo}</span></td></tr>
-    <tr><td style="display:flex; align-items:center;"><span><strong>Section :</strong> ${info.section}</span><span style="flex:1; text-align:center;"><strong>Type :</strong> Regular</span></td></tr>
+    <tr><td style="display:flex; align-items:center;"><span><strong>Roll No. :</strong> ${info.roll}</span><span style="flex:1; text-align:center;"><strong>Registration No. :</strong> ${regNo}</span></td></tr>
+    <tr><td style="display:flex; align-items:center;"><span><strong>Section :</strong> ${info.section}</span><span style="flex:1; text-align:center;"><strong>Type of Student :</strong> Regular</span></td></tr>
     <tr><td><strong>Name of Institution :</strong> KASHIANI GIRISH CHANDRA PILOT HIGH SCHOOL</td></tr>
 </table>
                         </div>
