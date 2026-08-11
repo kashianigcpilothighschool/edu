@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>রেজাল্ট ট্রান্সক্রিপ্ট</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nikosh:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nikosh:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -12,11 +12,12 @@
         }
 
         body {
-            font-family: 'Nikosh', sans-serif;
+            font-family: 'EB Garamond', 'Nikosh', serif;
             background: linear-gradient(135deg, #0e7a38 0%, #14A44D 100%);
             padding: 20px;
             margin: 0;
             color: #333;
+            font-weight: 700;
             position: relative;
             min-height: 100vh;
             overflow-x: hidden;
@@ -109,7 +110,7 @@
             color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
             font-size: 13.5px;
-            font-weight: 600;
+            font-weight: 700;
             background: rgba(255, 255, 255, 0.12);
             padding: 8px 14px;
             border-radius: 20px;
@@ -157,7 +158,7 @@
 
         .main-title {
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
             color: rgba(255, 255, 255, 0.85);
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -179,7 +180,7 @@
 
         .sub-title {
             font-size: 18px;
-            font-weight: 500;
+            font-weight: 700;
             color: rgba(255, 255, 255, 0.9);
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
             animation: slideInUp 1s ease-out;
@@ -237,7 +238,7 @@
             margin: 0;
             padding: 16px 30px;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
             color: #333;
             background: #f4f6f4;
             border-bottom: 1px solid #e6ebe8;
@@ -333,7 +334,7 @@
             width: 100%;
             background: #fff;
             color: #333;
-            font-family: 'Nikosh', sans-serif;
+            font-family: 'EB Garamond', 'Nikosh', serif;
             transition: all 0.2s ease;
         }
 
@@ -357,7 +358,7 @@
             border: 1.5px solid #dde3e8;
             background: #fff;
             color: #333;
-            font-family: 'Nikosh', sans-serif;
+            font-family: 'EB Garamond', 'Nikosh', serif;
             transition: all 0.2s ease;
             cursor: pointer;
             width: 100%;
@@ -382,8 +383,8 @@
             border: none;
             border-radius: 12px;
             cursor: pointer;
-            font-family: 'Nikosh', sans-serif;
-            font-weight: 600;
+            font-family: 'EB Garamond', 'Nikosh', serif;
+            font-weight: 700;
             transition: transform 0.15s ease, box-shadow 0.15s ease;
             box-shadow: 0 4px 15px rgba(20, 164, 77, 0.25);
         }
@@ -498,7 +499,7 @@
             transform: translateY(-50%);
             text-align: left;
             font-size: 11.5px;
-            font-weight: 600;
+            font-weight: 700;
             color: #000;
         }
         /* --- END OF NEW CSS --- */
@@ -516,7 +517,7 @@
         }
 
         .transcript-header h2 {
-            font-size: 21px;
+            font-size: 22.5px;
             font-weight: 700;
             color: #000000;
             margin: 6px 0 2px;
@@ -525,14 +526,14 @@
         }
 
         .transcript-header h3 {
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 15px;
+            font-weight: 700;
             color: #34495e;
             margin: 2px 0;
         }
 
         .transcript-header h3.transcript-title {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             color: #0e7a38;
             text-transform: uppercase;
@@ -545,7 +546,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 22px;
-            font-size: 13.5px;
+            font-size: 14.5px;
             border-radius: 0;
             overflow: hidden;
             box-shadow: none;
@@ -559,7 +560,7 @@
             font-weight: 700;
             text-transform: none;
             letter-spacing: 0.3px;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         th,
@@ -609,8 +610,8 @@
             text-align: left;
             border: none;
             padding: 5px 0;
-            font-weight: 500;
-            font-size: 13.5px;
+            font-weight: 700;
+            font-size: 14.5px;
             color: #000000;
         }
 
@@ -660,11 +661,23 @@
         }
 
         .summary-line {
-            font-size: 14px;
+            font-size: 15px;
             text-align: center;
-            font-weight: 600;
+            font-weight: 700;
             color: #000000;
             line-height: 1.8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .summary-middle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
         }
         
         .summary-item strong i {
@@ -686,7 +699,7 @@
             margin-top: 55px;
             padding: 0 60px 26px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             color: #000000;
             font-style: italic;
         }
@@ -716,7 +729,7 @@
             text-align: center;
             font-size: 18px;
             color: #14A44D;
-            font-weight: 500;
+            font-weight: 700;
         }
 
         .loading::after {
@@ -751,7 +764,7 @@
             color: #e74c3c;
             text-align: center;
             font-size: 18px;
-            font-weight: 500;
+            font-weight: 700;
             padding: 30px;
             background: rgba(231, 76, 60, 0.1);
             border-radius: 15px;
@@ -877,7 +890,7 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 0.3in;
+                margin: 0.22in;
             }
 
             * {
@@ -895,8 +908,9 @@
                 background: white !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                font-size: 11pt !important;
-                line-height: 1.2 !important;
+                font-size: 12pt !important;
+                font-weight: 700 !important;
+                line-height: 1.25 !important;
                 color: #000 !important;
             }
             
@@ -908,8 +922,8 @@
             /* Make sure the logo is visible on print */
             .print-logo {
                 display: block !important;
-                width: 80px !important;
-                height: 80px !important;
+                width: 110px !important;
+                height: 110px !important;
                 border-radius: 50% !important;
                 border: 1px solid #000 !important;
             }
@@ -928,7 +942,7 @@
                 top: 50% !important;
                 transform: translateY(-50%) !important;
                 text-align: left !important;
-                font-size: 9pt !important;
+                font-size: 10.5pt !important;
             }
             
             .container {
@@ -937,7 +951,7 @@
                 box-shadow: inset 0 0 0 6px #fff, inset 0 0 0 7.5px #b5121b !important;
                 border: 2.5px solid #0e7a38 !important;
                 border-radius: 0 !important;
-                padding: 12px 8px 2px !important;
+                padding: 8px 6px 2px !important;
                 margin: 0 !important;
                 background: white !important;
                 display: flex;
@@ -956,24 +970,8 @@
                 display: none !important;
             }
 
-            /* Faint repeated watermark, printed behind all content on every page */
             .container::after {
-                content: "109487   109487   109487   109487\A109487   109487   109487   109487\A109487   109487   109487   109487\A109487   109487   109487   109487\A109487   109487   109487   109487\A109487   109487   109487   109487\A109487   109487   109487   109487\A109487   109487   109487   109487\A109487   109487   109487   109487\A109487   109487   109487   109487\A109487   109487   109487   109487\A109487   109487   109487   109487" !important;
-                position: fixed !important;
-                top: 50% !important;
-                left: 50% !important;
-                width: 130vw !important;
-                height: 130vh !important;
-                display: block !important;
-                white-space: pre !important;
-                text-align: center !important;
-                font-size: 13pt !important;
-                line-height: 2.4 !important;
-                color: rgba(0, 0, 0, 0.07) !important;
-                font-weight: bold !important;
-                transform: translate(-50%, -50%) rotate(-30deg) !important;
-                z-index: -1 !important;
-                pointer-events: none !important;
+                display: none !important;
             }
             
             .transcript-header {
@@ -981,30 +979,30 @@
                 flex-direction: column !important;
                 justify-content: center !important;
                 align-items: center !important;
-                gap: 6px !important;
+                gap: 3px !important;
                 text-align: center !important;
-                margin-bottom: 8px !important;
-                padding-bottom: 6px !important;
+                margin-bottom: 4px !important;
+                padding-bottom: 3px !important;
                 page-break-inside: avoid !important;
                 page-break-after: avoid !important;
             }
 
             .transcript-header h2 {
-                font-size: 18pt !important;
+                font-size: 16pt !important;
                 font-weight: bold !important;
-                margin: 0 0 2px 0 !important;
+                margin: 0 0 1px 0 !important;
                 color: #000 !important;
             }
 
             .transcript-header h3 {
-                font-size: 13pt !important;
-                font-weight: normal !important;
-                margin: 1px 0 !important;
+                font-size: 12pt !important;
+                font-weight: bold !important;
+                margin: 0.5px 0 !important;
                 color: #000 !important;
             }
 
             .student-info-section {
-                margin-bottom: 8px !important;
+                margin-bottom: 4px !important;
                 page-break-inside: avoid !important;
             }
 
@@ -1022,8 +1020,8 @@
             }
 
             .main-content-wrapper .info-table td {
-                padding: 3.5px 10px !important;
-                font-size: 11.5pt !important;
+                padding: 3px 10px !important;
+                font-size: 12pt !important;
                 border: none !important;
                 color: #000 !important;
                 text-align: left !important;
@@ -1034,8 +1032,8 @@
                 right: 0 !important;
                 top: 110% !important;
                 transform: translateY(-50%) !important;
-                width: 190px !important;
-                font-size: 10.5pt !important;
+                width: 160px !important;
+                font-size: 9pt !important;
                 border: 1px solid #000 !important;
                 background: white !important;
                 box-shadow: none !important;
@@ -1044,9 +1042,9 @@
             }
             
             .grade-scale th, .grade-scale td {
-                padding: 2.5px !important;
+                padding: 1.5px !important;
                 border: 1px solid #000 !important;
-                font-size: 10.5pt !important;
+                font-size: 9pt !important;
                 text-align: center;
             }
 
@@ -1066,7 +1064,7 @@
                 width: 100% !important;
                 margin: 0 !important;
                 border-collapse: collapse !important;
-                font-size: 11.5pt !important;
+                font-size: 12pt !important;
                 border: 1px solid #000 !important;
             }
 
@@ -1082,13 +1080,23 @@
             .main-content-wrapper th {
                 background: white !important;
                 color: #000 !important;
-                padding: 4px 5px !important;
+                padding: 7px 4px !important;
                 font-weight: bold !important;
-                font-size: 11.5pt !important;
+                font-size: 12pt !important;
             }
             
             .main-content-wrapper td {
-                padding: 5px 5px !important; 
+                padding: 8px 4px !important; 
+            }
+
+            .additional-section {
+                margin-top: 5px !important;
+                page-break-inside: avoid !important;
+            }
+
+            .additional-section h4 {
+                font-size: 10.5pt !important;
+                margin: 4px 0 3px 0 !important;
             }
             
             .main-content-wrapper th, .main-content-wrapper td {
@@ -1097,8 +1105,8 @@
             }
             
             .summary-section {
-                padding: 6px !important;
-                margin-top: 8px !important;
+                padding: 4px !important;
+                margin-top: 5px !important;
                 background: white !important;
                 border-radius: 0 !important;
                 border: 1px solid #000 !important;
@@ -1107,20 +1115,29 @@
             }
 
             .summary-line {
-                font-size: 11pt !important;
+                font-size: 11.5pt !important;
                 text-align: center !important;
-                font-weight: normal !important;
+                font-weight: bold !important;
                 display: flex;
+                align-items: center;
                 flex-wrap: wrap;
-                justify-content: center;
-                gap: 8px;
+                justify-content: space-between;
+                gap: 6px;
                 color: #000 !important;
+            }
+
+            .summary-middle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 6px;
             }
             
             .summary-item {
                 display: inline-block !important;
                 margin: 0 !important;
-                padding: 2px 6px !important;
+                padding: 1px 5px !important;
                 background: white !important;
                 border-radius: 0 !important;
                 box-shadow: none !important;
@@ -1129,15 +1146,15 @@
             .signature {
                 display: flex !important;
                 justify-content: space-between !important;
-                margin-top: 14px;
-                padding: 0 40px 0 40px !important;
-                font-size: 11.5pt !important;
+                margin-top: auto !important;
+                padding: 0 30px 0 30px !important;
+                font-size: 10pt !important;
                 page-break-inside: avoid;
             }
 
             .signature div {
                 text-align: center !important;
-                padding-top: 20px !important;
+                padding-top: 12px !important;
                 font-weight: bold;
                 color: #000 !important;
             }
@@ -1156,16 +1173,16 @@
             .print-timestamp {
                 display: block !important;
                 text-align: right !important;
-                font-size: 7pt !important;
+                font-size: 7.5pt !important;
                 color: #555 !important;
-                margin-top: 4px !important;
+                margin-top: 2px !important;
             }
 
             .print-timestamp::after {
                 content: "Powered By Emdadul Haque (Teacher, Kashiani G.C.Pilot High School)" !important;
                 display: block !important;
                 text-align: center !important;
-                font-size: 7pt !important;
+                font-size: 8pt !important;
                 color: #777 !important;
                 margin-top: 3px !important;
             }
@@ -1482,13 +1499,6 @@
                     <div class="additional-section" style="margin-top: 15px;">
                         <h4 style="margin-bottom: 8px;">Additional Subject</h4>
                         <table>
-                            <thead>
-                                <tr>
-                                    <th>Sl</th>
-                                    <th>Subject</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
                             <tbody>`;
                 additional.forEach((s, idx) => {
                     html += `
@@ -1507,12 +1517,12 @@
             html += `
                     <div class="summary-section">
                         <div class="summary-line">
-                            <div class="summary-item"><strong>Total Marks:</strong> ${results.totalMarks} / ${results.fullMarks}</div>
-                            <div class="summary-item"><strong>GPA:</strong> ${results.gpa}</div>
-                            <div class="summary-item"><strong>Grade:</strong> ${results.letterGrade}</div>
-                            
-                            
-                            <div class="summary-item"><strong>Position:</strong> ${results.position}</div>
+                            <div class="summary-item summary-left"><strong>Total Marks:</strong> ${results.totalMarks} / ${results.fullMarks}</div>
+                            <div class="summary-middle">
+                                <div class="summary-item"><strong>GPA:</strong> ${results.gpa}</div>
+                                <div class="summary-item"><strong>Grade:</strong> ${results.letterGrade}</div>
+                            </div>
+                            <div class="summary-item summary-right"><strong>Position:</strong> ${results.position}</div>
                         </div>
                     </div>
                 </div>
