@@ -546,6 +546,46 @@
     nav.main-nav a{ padding:9px 11px; font-size:15px; }
     .quick-badges{ grid-template-columns:1fr; }
   }
+
+  /* ============================================================
+     📢 NOTICE BOARD
+     ============================================================ */
+  #noticeList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  }
+  #noticeList li {
+      margin-bottom: 8px;
+  }
+  #noticeList li a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      text-decoration: none;
+  }
+  #noticeList li a > span:first-child {
+      flex: 1;
+  }
+  #noticeList .date {
+      white-space: nowrap;
+      font-size: 13px;
+      opacity: 0.75;
+  }
+  .notice-loading {
+      text-align: center;
+      opacity: 0.7;
+  }
+  .notice-empty {
+      text-align: center;
+      padding: 15px;
+      opacity: 0.7;
+  }
+  .notice-error {
+      text-align: center;
+      padding: 15px;
+  }
 </style>
 </head>
 <body>
@@ -736,8 +776,9 @@
             </span>
           </h4>
           <ul id="noticeList">
-            <li><a href="https://script.google.com/macros/s/AKfycbxaULoHbIe2sFA6OIhSa-j0GUSn4C6CsBLw5s_JJ1Q-s1i1A430AKp84IqZF0rhR1iX/exec" target="_blank"><span data-bn="বার্ষিক পরীক্ষার ফলাফল প্রকাশ" data-en="Annual Exam Result Published">বার্ষিক পরীক্ষার ফলাফল প্রকাশ</span><span class="date">২০২৫</span></a></li>
-            <li><a href="https://sites.google.com/view/citizen-kgcphs/form/" target="_blank"><span data-bn="নতুন শিক্ষাবর্ষের ছাত্র নিবন্ধন চলছে" data-en="New Academic Year Student Registration Ongoing">নতুন শিক্ষাবর্ষের ছাত্র নিবন্ধন চলছে</span><span class="date">২০২৫</span></a></li>
+            <li class="notice-loading">
+                <span>নোটিশ লোড হচ্ছে...</span>
+            </li>
           </ul>
         </div>
       </div>
@@ -868,6 +909,8 @@
       });
     })();
   </script>
+
+  <script src="notice.js"></script>
 
 </body>
 </html>
