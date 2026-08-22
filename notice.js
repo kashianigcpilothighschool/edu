@@ -7,6 +7,56 @@ const NOTICE_API =
 
 
 // ============================================================
+// 🔴 লাল স্ক্রলিং বিজ্ঞপ্তি বার আপডেট
+// ============================================================
+
+function updateMarquee(notices) {
+
+    const marqText =
+        document.getElementById(
+            'marqText'
+        );
+
+    const marqLink =
+        document.getElementById(
+            'marqLink'
+        );
+
+
+    if (!marqText || !marqLink) {
+        return;
+    }
+
+
+    if (
+        !notices ||
+        notices.length === 0
+    ) {
+        return;
+    }
+
+
+    // সবচেয়ে সাম্প্রতিক নোটিশ (তালিকার প্রথমটি)
+    const latest =
+        notices[0];
+
+
+    marqText.textContent =
+        latest.title +
+        (
+            latest.date
+                ? ' — ' + latest.date
+                : ''
+        );
+
+
+    marqLink.href =
+        latest.url;
+
+}
+
+
+// ============================================================
 // 📢 Notice Load
 // ============================================================
 
@@ -73,6 +123,13 @@ async function loadNotices() {
 
         const notices =
             data.notices || [];
+
+
+        // ------------------------------------------------------
+        // 🔴 উপরের লাল স্ক্রলিং বিজ্ঞপ্তি বার আপডেট
+        // ------------------------------------------------------
+
+        updateMarquee(notices);
 
 
         // ------------------------------------------------------
