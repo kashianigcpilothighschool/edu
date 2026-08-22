@@ -252,6 +252,45 @@ async function loadNotices() {
                 );
 
 
+                // ------------------------------------------------
+                // ⬇️ ডাউনলোড বাটন (থাকলেই দেখাবে)
+                // ------------------------------------------------
+
+                if (notice.downloadUrl) {
+
+                    const downloadLink =
+                        document.createElement(
+                            'a'
+                        );
+
+                    downloadLink.href =
+                        notice.downloadUrl;
+
+                    downloadLink.target =
+                        '_blank';
+
+                    downloadLink.rel =
+                        'noopener noreferrer';
+
+                    downloadLink.download =
+                        '';
+
+                    downloadLink.className =
+                        'notice-download';
+
+                    downloadLink.title =
+                        'ডাউনলোড করুন';
+
+                    downloadLink.textContent =
+                        '⬇';
+
+                    li.appendChild(
+                        downloadLink
+                    );
+
+                }
+
+
                 noticeList.appendChild(
                     li
                 );
