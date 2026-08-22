@@ -558,13 +558,18 @@
   }
   #noticeList li {
       margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
   }
-  #noticeList li a {
+  #noticeList li a:not(.notice-download) {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 15px;
       text-decoration: none;
+      min-width: 0;
   }
   #noticeList li a > span:first-child {
       flex: 1;
@@ -573,6 +578,24 @@
       white-space: nowrap;
       font-size: 13px;
       opacity: 0.75;
+  }
+  .notice-download {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--green-light);
+      color: var(--green-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      text-decoration: none;
+      border: 1px solid var(--green);
+  }
+  .notice-download:hover {
+      background: var(--green);
+      color: #fff;
   }
   .notice-loading {
       text-align: center;
