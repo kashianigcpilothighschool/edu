@@ -36,22 +36,31 @@ function updateMarquee(notices) {
     }
 
 
-    // সবচেয়ে সাম্প্রতিক নোটিশ (তালিকার প্রথমটি)
-    const latest =
-        notices[0];
+    // ------------------------------------------------------
+    // সবগুলো নোটিশের শিরোনাম একসাথে জোড়া লাগানো,
+    // যাতে সবগুলো পরপর স্ক্রল হয়
+    // ------------------------------------------------------
+
+    const combinedText =
+        notices
+            .map(function(n) {
+                return n.title +
+                    (
+                        n.date
+                            ? ' (' + n.date + ')'
+                            : ''
+                    );
+            })
+            .join('   ●   ');
 
 
     marqText.textContent =
-        latest.title +
-        (
-            latest.date
-                ? ' — ' + latest.date
-                : ''
-        );
+        combinedText;
 
 
+    // ক্লিক করলে সবচেয়ে সাম্প্রতিক নোটিশ খুলবে
     marqLink.href =
-        latest.url;
+        notices[0].url;
 
 }
 
