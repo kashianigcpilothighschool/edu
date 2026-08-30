@@ -519,6 +519,12 @@
             z-index: 0;
         }
 
+        /* ✅ ALL মোডে একাধিক .container (প্রতিটি এক-একজন শিক্ষার্থীর ট্রান্সক্রিপ্ট) পরপর বসলে
+           স্ক্রিনে দেখতে ফাঁকা জায়গা রাখার জন্য — প্রিন্টে এই margin রিসেট হয়ে যায় (নিচে দেখুন) */
+        .container + .container {
+            margin-top: 40px;
+        }
+
         .container > * {
             position: relative;
             z-index: 1;
@@ -997,6 +1003,15 @@
                 font-weight: 700 !important;
                 line-height: 1.25 !important;
                 color: #000 !important;
+                display: block !important;
+            }
+
+            /* ✅ ALL মোডে একাধিক .container পেজের পর পেজে ঠিকমতো প্রিন্ট হওয়ার জন্য —
+               body/#result কে flex থেকে সরিয়ে block করা হয়েছে, কারণ flex কনটেইনার
+               একাধিক পেজে reflow/paginate করতে পারে না (Chrome-এর পরিচিত সমস্যা) */
+            #result {
+                display: block !important;
+                flex: none !important;
             }
             
             /* Hide unnecessary elements */
@@ -1041,9 +1056,16 @@
                 background: white !important;
                 display: flex;
                 flex-direction: column;
-                min-height: 100%;
+                min-height: 100vh;
                 position: relative !important;
                 z-index: 1 !important;
+            }
+
+            /* ✅ ALL মোডে একাধিক শিক্ষার্থীর .container পরপর থাকলে, প্রতিটি নতুন শিক্ষার্থীর
+               ট্রান্সক্রিপ্ট নতুন পেজে শুরু হবে — INDIVIDUAL মোডের সেম পেজ সেটাপ বজায় থাকে */
+            .container + .container {
+                page-break-before: always !important;
+                break-before: page !important;
             }
 
             .container > * {
@@ -1597,7 +1619,8 @@
                 });
         }
 
-        // ✅ ALL মোডে পুরো ক্লাসের সারাংশ টেবিল দেখানো
+        // ✅ ALL মোডে — INDIVIDUAL এর মতোই প্রতিটি শিক্ষার্থীর সম্পূর্ণ ট্রান্সক্রিপ্ট
+        // Roll নম্বর অনুযায়ী ক্রমানুসারে, একটার পর একটা (প্রিন্ট করলে প্রতিটি আলাদা পেজে আসবে)
         function displayAllResults(data) {
             const resultDiv = document.getElementById("result");
 
@@ -1609,42 +1632,46 @@
                 return;
             }
 
-            let rows = '';
-            data.students.forEach((s, idx) => {
-                const info = s.studentInfo;
-                const r = s.results;
-                rows += `
-                <tr>
-                    <td>${idx + 1}</td>
-                    <td>${info.roll}</td>
-                    <td style="text-align:left;">${info.name}</td>
-                    <td>${r.totalMarks}</td>
-                    <td>${r.gpa}</td>
-                    <td>${r.letterGrade}</td>
-                    <td>${r.position}</td>
-                    <td><button class="view-btn" onclick="viewTeacherIndividual('${info.roll}')">বিস্তারিত</button></td>
-                </tr>`;
+            if (!data.students || data.students.length === 0) {
+                resultDiv.innerHTML = `
+                <div class="container" style="animation: none;">
+                    <div class="error-message">⚠ কোনো শিক্ষার্থীর তথ্য পাওয়া যায়নি</div>
+                </div>`;
+                return;
+            }
+
+            // ✅ Roll নম্বর অনুযায়ী সংখ্যাগতভাবে (ascending) সাজানো হচ্ছে
+            const sortedStudents = [...data.students].sort((a, b) => {
+                const rollA = parseInt(String(a.studentInfo?.roll ?? '').trim(), 10);
+                const rollB = parseInt(String(b.studentInfo?.roll ?? '').trim(), 10);
+                if (isNaN(rollA) && isNaN(rollB)) return 0;
+                if (isNaN(rollA)) return 1;
+                if (isNaN(rollB)) return -1;
+                return rollA - rollB;
             });
 
-            resultDiv.innerHTML = `
-            <div class="container" style="animation: none;">
-                <h3 style="text-align:center;">${data.examName || ''} — সব শিক্ষার্থীর ফলাফল</h3>
-                <table class="all-results-table">
-                    <thead>
-                        <tr>
-                            <th>Sl</th>
-                            <th>Roll</th>
-                            <th>Name</th>
-                            <th>Total</th>
-                            <th>GPA</th>
-                            <th>Grade</th>
-                            <th>Position</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>${rows}</tbody>
-                </table>
-            </div>`;
+            const totalStudents = data.totalStudents || sortedStudents.length;
+
+            // ✅ INDIVIDUAL মোডের মতোই — কোনো এক্সট্রা হেডিং/র‍্যাপার ছাড়া, শুধু .container একটার পর একটা
+            // পেজ-ব্রেক CSS দিয়ে (.container + .container) নিয়ন্ত্রণ করা হয়, তাই প্রতিটি ট্রান্সক্রিপ্টের
+            // পেজ সেটাপ ঠিক ইনডিভিজুয়ালের মতোই থাকে
+            let allHtml = '';
+
+            sortedStudents.forEach((s) => {
+                const studentData = {
+                    success: true,
+                    examName: data.examName,
+                    totalStudents: totalStudents,
+                    studentInfo: s.studentInfo,
+                    results: s.results,
+                    subjects: s.subjects,
+                    additional: s.additional || []
+                };
+
+                allHtml += buildTranscriptHTML(studentData);
+            });
+
+            resultDiv.innerHTML = allHtml;
         }
 
         // ✅ ALL লিস্ট থেকে কোনো একজনের সম্পূর্ণ ট্রান্সক্রিপ্ট দেখা
@@ -1700,9 +1727,15 @@
                 return;
             }
 
+            document.getElementById("result").innerHTML = buildTranscriptHTML(data);
+        }
+
+        // ✅ একজন শিক্ষার্থীর সম্পূর্ণ ট্রান্সক্রিপ্ট HTML তৈরি করে (string রিটার্ন করে, সরাসরি দেখায় না)
+        // এটি displayResult (INDIVIDUAL) এবং displayAllResults (ALL) — দুটোতেই ব্যবহৃত হয়
+        function buildTranscriptHTML(data) {
             const info = data.studentInfo;
             const results = data.results;
-            const subjects = data.subjects;
+            const subjects = data.subjects || [];
             const additional = data.additional || [];
 
             // ✅ Registration No. = সেশনের সালের শেষ ২ ডিজিট + ক্লাসের ২ ডিজিট + রোলের ৪ ডিজিট
@@ -1862,7 +1895,7 @@
                 <p class="print-timestamp">Printed on: ${new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
             </div>`;
 
-            document.getElementById("result").innerHTML = html;
+            return html;
         }
 
         // Enhanced keyboard support
