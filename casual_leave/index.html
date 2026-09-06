@@ -60,7 +60,7 @@
     padding:30px 32px;
     display:flex;
     align-items:center;
-    gap:22px;
+    justify-content:center;
     margin-bottom:20px;
     box-shadow:var(--shadow-card);
     position:relative;
@@ -79,7 +79,10 @@
     font-size:1.3rem;
     background:linear-gradient(150deg,var(--forest),var(--forest-deep));
     box-shadow:0 6px 16px -4px var(--forest-glow);
-    position:relative;
+    position:absolute;
+    left:32px;
+    top:50%;
+    transform:translateY(-50%);
   }
   .seal::after{
     content:'';
@@ -87,6 +90,12 @@
     border:1.5px dashed var(--brass);
     border-radius:50%;
     opacity:.6;
+  }
+  .letterhead-text{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
   }
   .letterhead-text h1{
     font-size:1.55rem;
@@ -467,7 +476,6 @@
   <div class="modal-overlay" id="indexModal">
     <div class="modal-box">
       <h3>ইনডেক্স নম্বর দিন</h3>
-      <p>এই নম্বরটি Sheet-এর F2:F কলামের সাথে মিলিয়ে যাচাই করা হবে।</p>
       <input type="text" id="indexNumberInput" placeholder="যেমনঃ ১২ বা INX-012">
       <div class="validation-message" id="indexNumberError">ইনডেক্স নম্বর লিখুন</div>
       <div class="modal-actions">
@@ -494,7 +502,6 @@
 
     <div class="toolbar">
       <div class="toolbar-group">
-        <div class="toolbar-label">ফন্ট</div>
         <div class="segmented">
           <button class="font-btn active" id="kalpurushBtn" onclick="changeFont('kalpurush')">কালপুরুষ</button>
           <button class="font-btn" id="notoBengaliBtn" onclick="changeFont('noto-bengali')">নোটো সান্স</button>
@@ -502,7 +509,6 @@
         </div>
       </div>
       <div class="toolbar-group">
-        <div class="toolbar-label">টেমপ্লেট</div>
         <div class="segmented">
           <button class="template-card active" id="standardTemplate" onclick="selectTemplate('standard')">স্ট্যান্ডার্ড</button>
           <button class="template-card" id="medicalTemplate" onclick="selectTemplate('medical')">চিকিৎসা</button>
@@ -510,7 +516,6 @@
         </div>
       </div>
       <div class="toolbar-group">
-        <div class="toolbar-label">ভাষার ধরন</div>
         <div class="segmented">
           <button class="style-btn active" id="formalBtn" onclick="setStyle('formal')">আনুষ্ঠানিক</button>
           <button class="style-btn" id="simpleBtn" onclick="setStyle('simple')">সাধারণ</button>
@@ -528,11 +533,6 @@
 
       <!-- ধাপ ১ -->
       <div class="section">
-        <div class="section-head">
-          <span class="section-index">০১</span>
-          <h2>পরিচিতি ও প্রাতিষ্ঠানিক তথ্য</h2>
-        </div>
-
         <div class="row">
           <div class="field field-with-toggle">
             <label>আবেদনের তারিখ<span class="req">*</span></label>
@@ -627,11 +627,6 @@
 
       <!-- ধাপ ২ -->
       <div class="section">
-        <div class="section-head">
-          <span class="section-index">০২</span>
-          <h2>ছুটির বিবরণ</h2>
-        </div>
-
         <div class="row">
           <div class="field">
             <label>চলতি বছরে নেওয়া মোট ছুটি<span class="req">*</span></label>
@@ -658,11 +653,6 @@
 
       <!-- ধাপ ৩ -->
       <div class="section">
-        <div class="section-head">
-          <span class="section-index">০৩</span>
-          <h2>ছুটির মেয়াদ</h2>
-        </div>
-
         <div class="row">
           <div class="field">
             <label>ছুটির ধরন<span class="req">*</span></label>
@@ -1206,9 +1196,10 @@ ${schoolParts.slice(1).join(', ')}
     document.getElementById('indexModal').classList.remove('show');
   }
 
-  function confirmIndexAndPrint() {
+  async function confirmIndexAndPrint() {
     const input = document.getElementById('indexNumberInput');
     const errorDiv = document.getElementById('indexNumberError');
+    const confirmBtn = document.querySelector('.modal-confirm');
     const indexNumber = input.value.trim();
 
     if (!indexNumber) {
@@ -1217,6 +1208,56 @@ ${schoolParts.slice(1).join(', ')}
       errorDiv.classList.add('show');
       return;
     }
+    if (!pendingSheetData || !pendingSheetData.name) {
+      input.classList.add('invalid');
+      errorDiv.textContent = 'শিক্ষকের নাম পাওয়া যায়নি, আবার আবেদনপত্র তৈরি করুন';
+      errorDiv.classList.add('show');
+      return;
+    }
+
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'যাচাই করা হচ্ছে...';
+
+    try {
+      const url = `${SHEET_WEB_APP_URL}?action=verify&name=${encodeURIComponent(pendingSheetData.name)}&index=${encodeURIComponent(indexNumber)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.error) {
+        input.classList.add('invalid');
+        errorDiv.textContent = 'যাচাই করা যায়নি, আবার চেষ্টা করুন';
+        errorDiv.classList.add('show');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'প্রিন্ট করুন';
+        return;
+      }
+      if (!data.found) {
+        input.classList.add('invalid');
+        errorDiv.textContent = 'এই নামে Sheet-এ কোনো ইনডেক্স নম্বর পাওয়া যায়নি';
+        errorDiv.classList.add('show');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'প্রিন্ট করুন';
+        return;
+      }
+      if (!data.match) {
+        input.classList.add('invalid');
+        errorDiv.textContent = 'ইনডেক্স নম্বর সঠিক নয়';
+        errorDiv.classList.add('show');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'প্রিন্ট করুন';
+        return;
+      }
+    } catch (err) {
+      input.classList.add('invalid');
+      errorDiv.textContent = 'যাচাই করা যায়নি, ইন্টারনেট সংযোগ পরীক্ষা করুন';
+      errorDiv.classList.add('show');
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'প্রিন্ট করুন';
+      return;
+    }
+
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'প্রিন্ট করুন';
     input.classList.remove('invalid');
     errorDiv.classList.remove('show');
     closeIndexModal();
