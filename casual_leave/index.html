@@ -616,6 +616,7 @@
   let currentTemplate = 'standard';
   let currentFont = 'kalpurush';
   let inputModes = { name:false, designation:false, school:false, mobile:false, email:false, leaveReason:false };
+  let pendingSheetData = null;
 
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("today").value = new Date().toISOString().split('T')[0];
@@ -911,7 +912,7 @@
 
       generateBtn.innerHTML = '<i class="fas fa-feather-pointed"></i> আনুষ্ঠানিক আবেদনপত্র তৈরি করুন';
       showNotification('আবেদনপত্র সফলভাবে তৈরি হয়েছে!');
-      saveTeacherDataToSheet(name, designation, school, totalLeave);
+      pendingSheetData = { name, designation, school, totalLeave };
     }, 900);
   }
 
@@ -1105,9 +1106,14 @@ ${schoolParts.slice(1).join(', ')}
     printWindow.document.close();
     printWindow.focus();
     setTimeout(() => { printWindow.print(); printWindow.close(); showNotification('প্রিন্ট প্রক্রিয়া শুরু হয়েছে!'); }, 500);
+    if (pendingSheetData) {
+      saveTeacherDataToSheet(pendingSheetData.name, pendingSheetData.designation, pendingSheetData.school, pendingSheetData.totalLeave);
+      pendingSheetData = null;
+    }
   }
 
   function resetForm() {
+    pendingSheetData = null;
     document.getElementById('today').value = new Date().toISOString().split('T')[0];
     document.getElementById('totalLeave').value = '0';
     document.getElementById('leaveType').value = '1';
