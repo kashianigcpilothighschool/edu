@@ -328,7 +328,21 @@
     .leave-info {
       background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
       border: 2px solid rgba(240, 147, 251, 0.2);
+      position: relative;
     }
+
+    .sheet-status {
+      font-size: 0.8rem;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+    }
+
+    .sheet-status.loading { color: #667eea; }
+    .sheet-status.success { color: #16a34a; }
+    .sheet-status.error { color: #ff6b6b; }
 
     .generate-btn {
       width: 100%;
@@ -769,7 +783,7 @@
               <option value="উজ্জল কুমার সাহা">উজ্জল কুমার সাহা</option>
               <option value="মোঃ ইমরান হোসেন মোল্যা">মোঃ ইমরান হোসেন মোল্যা</option>
               <option value="সমির ভক্ত">সমির ভক্ত</option>
-              <option value="নয়ন দাস">নয়ন দাস</option>
+              <option value="নয়ন দাস">নয়ন দাস</option>
               <option value="সালমা আক্তার">সালমা আক্তার</option>
               <option value="রফিকুল ইসলাম">রফিকুল ইসলাম</option>
               <option value="আমিনা খাতুন">আমিনা খাতুন</option>
@@ -834,7 +848,7 @@
               <option value="০১৭১৮৮০৮২৯২">০১৭১৮৮০৮২৯২</option>
               <option value="০১৭১২৯৯৩০০৫">০১৭১২৯৯৩০০৫</option>
               <option value="০১৭১২৪৮৯৫২৭">০১৭১২৪৮৯৫২৭</option>
-              <option value="০১৬২৩০৩৮৩৭৩">০১৬২৩০৩৮৩৭৪</option>
+              <option value="০১৬২৩০৩৮৩৭৪">০১৬২৩০৩৮৩৭৪</option>
               <option value="০১৬১২৩৪৫৬৭৮">০১৬১২৩৪৫৬৭৮</option>
               <option value="০১৯২৩৪৫৬৭৮৯">০১৯২৩৪৫৬৭৮৯</option>
             </select>
@@ -882,6 +896,7 @@
               </label>
               <input type="number" id="totalLeave" class="form-input" value="0" min="0" max="20" required>
               <div class="validation-message" id="totalLeaveError">০-২০ এর মধ্যে সংখ্যা দিন</div>
+              <div class="sheet-status" id="sheetStatus"></div>
             </div>
             
             <div class="form-group custom-container">
@@ -988,6 +1003,11 @@
   </div>
 
   <script>
+    // ==========================================================
+    // Google Sheet Web App URL - এখানে আপনার Deploy করা URL বসান
+    // ==========================================================
+    const SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyBVGLQ2GqmJytePRtVZKqff98ZzFHpmM5pshl9yjDJ0hAdHNZHP00ME-Uj-v387sVy0g/exec";
+
     let currentStyle = 'formal';
     let currentTemplate = 'standard';
     let currentFont = 'kalpurush';
@@ -1004,24 +1024,10 @@
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("today").value = new Date().toISOString().split('T')[0];
       changeFont('kalpurush');
-
-      // Restore last saved "totalLeave" value, if any
-      try {
-        const savedTotalLeave = localStorage.getItem('savedTotalLeave');
-        if (savedTotalLeave !== null) {
-          document.getElementById('totalLeave').value = savedTotalLeave;
-        }
-      } catch (e) {}
-
       updateProgress();
       addValidationListeners();
-    });
-
-    // Save "totalLeave" value whenever it changes
-    document.getElementById('totalLeave').addEventListener('input', function() {
-      try {
-        localStorage.setItem('savedTotalLeave', this.value);
-      } catch (e) {}
+      // পেজ লোড হওয়ার সাথে সাথে ডিফল্ট নির্বাচিত নামের ডেটা Sheet থেকে আনা হচ্ছে
+      loadTeacherDataFromSheet(getFieldValue('name'));
     });
 
     function changeFont(font) {
@@ -1074,6 +1080,11 @@
       }
       updateProgress();
       validateField(field);
+
+      // নাম ফিল্ড টগল হলে সেই মুহূর্তের মান দিয়ে Sheet থেকে পুনরায় ডেটা লোড করা
+      if (field === 'name') {
+        loadTeacherDataFromSheet(getFieldValue('name'));
+      }
     }
 
     function getFieldValue(field) {
@@ -1227,6 +1238,12 @@
           inputElement.addEventListener('input', () => validateField(field));
         }
       });
+
+      // নাম নির্বাচন/পরিবর্তন হলে Sheet থেকে সেই শিক্ষকের তথ্য লোড করা
+      const nameSelect = document.getElementById('nameSelect');
+      const nameInput = document.getElementById('nameInput');
+      nameSelect.addEventListener('change', () => loadTeacherDataFromSheet(getFieldValue('name')));
+      nameInput.addEventListener('blur', () => loadTeacherDataFromSheet(getFieldValue('name')));
     }
 
     function updateProgress() {
@@ -1306,6 +1323,75 @@
       }, 3000);
     }
 
+    function setSheetStatus(message, type) {
+      const el = document.getElementById('sheetStatus');
+      el.textContent = message;
+      el.className = 'sheet-status' + (type ? ' ' + type : '');
+    }
+
+    // ==========================================================
+    // Google Sheet থেকে নির্দিষ্ট শিক্ষকের সংরক্ষিত তথ্য লোড করা
+    // ==========================================================
+    async function loadTeacherDataFromSheet(name) {
+      if (!SHEET_WEB_APP_URL || SHEET_WEB_APP_URL.indexOf('PASTE_YOUR_WEB_APP_URL_HERE') !== -1) {
+        setSheetStatus('Sheet সংযোগ কনফিগার করা হয়নি', '');
+        return;
+      }
+      if (!name) return;
+
+      setSheetStatus('আগের তথ্য লোড হচ্ছে...', 'loading');
+
+      try {
+        const url = `${SHEET_WEB_APP_URL}?action=get&name=${encodeURIComponent(name)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.error) {
+          setSheetStatus('তথ্য লোড করা যায়নি', 'error');
+          return;
+        }
+
+        if (data.found) {
+          document.getElementById('totalLeave').value = data.totalLeave || 0;
+          validateField('totalLeave');
+          setSheetStatus(`Sheet থেকে লোড হয়েছে (সর্বশেষ হালনাগাদ: ${data.lastUpdate || '-'})`, 'success');
+        } else {
+          setSheetStatus('এই নামে আগের কোনো তথ্য পাওয়া যায়নি', '');
+        }
+        updateProgress();
+      } catch (err) {
+        setSheetStatus('Sheet-এর সাথে সংযোগ ব্যর্থ হয়েছে', 'error');
+      }
+    }
+
+    // ==========================================================
+    // Google Sheet-এ নাম অনুযায়ী মোট ছুটির তথ্য Save/Update করা
+    // ==========================================================
+    async function saveTeacherDataToSheet(name, designation, school, totalLeave) {
+      if (!SHEET_WEB_APP_URL || SHEET_WEB_APP_URL.indexOf('PASTE_YOUR_WEB_APP_URL_HERE') !== -1) {
+        return; // কনফিগার না করা থাকলে চুপচাপ স্কিপ করা হবে
+      }
+
+      setSheetStatus('Sheet-এ সংরক্ষণ করা হচ্ছে...', 'loading');
+
+      try {
+        const res = await fetch(SHEET_WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' }, // Apps Script CORS সমস্যা এড়াতে text/plain
+          body: JSON.stringify({ name, designation, school, totalLeave })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          setSheetStatus('Google Sheet-এ সংরক্ষণ সম্পন্ন হয়েছে ✓', 'success');
+        } else {
+          setSheetStatus('সংরক্ষণ ব্যর্থ হয়েছে: ' + (data.error || ''), 'error');
+        }
+      } catch (err) {
+        setSheetStatus('Sheet-এর সাথে সংযোগ ব্যর্থ হয়েছে', 'error');
+      }
+    }
+
     function validateForm() {
       const requiredFields = ['today', 'name', 'designation', 'school', 'totalLeave', 'leaveReason'];
       const dateFields = document.getElementById('leaveType').value === 'multi' ? 
@@ -1381,6 +1467,9 @@
         generateBtn.innerHTML = '<i class="fas fa-file-alt"></i> আনুষ্ঠানিক আবেদনপত্র তৈরি করুন';
         
         showNotification('আবেদনপত্র সফলভাবে তৈরি হয়েছে!');
+
+        // আবেদন তৈরি হওয়ার সাথে সাথে Google Sheet-এ নাম অনুযায়ী তথ্য সংরক্ষণ করা হচ্ছে
+        saveTeacherDataToSheet(name, designation, school, totalLeave);
       }, 1500);
     }
 
@@ -1615,12 +1704,7 @@ ${schoolParts.slice(1).join(', ')}
     function resetForm() {
       // Reset all form fields
       document.getElementById('today').value = new Date().toISOString().split('T')[0];
-      try {
-        const savedTotalLeave = localStorage.getItem('savedTotalLeave');
-        document.getElementById('totalLeave').value = savedTotalLeave !== null ? savedTotalLeave : '0';
-      } catch (e) {
-        document.getElementById('totalLeave').value = '0';
-      }
+      document.getElementById('totalLeave').value = '0';
       document.getElementById('leaveType').value = '1';
       
       // Reset selects to first option
@@ -1651,35 +1735,19 @@ ${schoolParts.slice(1).join(', ')}
       
       // Hide result
       document.getElementById('result').style.display = 'none';
+      setSheetStatus('', '');
       
       // Reset progress
       updateProgress();
+
+      // রিসেট করার পর নতুন নির্বাচিত নামের ডেটা আবার Sheet থেকে লোড করা
+      loadTeacherDataFromSheet(getFieldValue('name'));
       
       // Scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
       
       showNotification('ফর্ম রিসেট করা হয়েছে');
     }
-
-    // Auto-save feature (optional)
-    function autoSave() {
-      const formData = {
-        today: document.getElementById('today').value,
-        totalLeave: document.getElementById('totalLeave').value,
-        leaveType: document.getElementById('leaveType').value,
-        currentStyle: currentStyle,
-        currentTemplate: currentTemplate,
-        currentFont: currentFont
-      };
-      
-      // Save to localStorage if available (note: this won't work in Claude artifacts)
-      // localStorage.setItem('leaveFormData', JSON.stringify(formData));
-    }
-
-    // Add auto-save listeners
-    document.querySelectorAll('input, select').forEach(element => {
-      element.addEventListener('change', autoSave);
-    });
 
     // Smooth scroll for form sections
     document.querySelectorAll('.form-input, .form-select').forEach(input => {
