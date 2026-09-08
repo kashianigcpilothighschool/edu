@@ -450,7 +450,7 @@
     color:var(--ink-soft);
     margin-bottom:16px;
   }
-  .modal-box input{
+  .modal-box input,.modal-box select{
     width:100%;
     font-family:inherit;
     font-size:.95rem;
@@ -458,9 +458,11 @@
     border:1px solid var(--line);
     border-radius:3px;
     margin-bottom:6px;
+    background:var(--white);
+    color:var(--ink);
   }
-  .modal-box input:focus{outline:none;border-color:var(--forest);box-shadow:0 0 0 3px rgba(15,74,46,0.12);}
-  .modal-box input.invalid{border-color:var(--red);}
+  .modal-box input:focus,.modal-box select:focus{outline:none;border-color:var(--forest);box-shadow:0 0 0 3px rgba(15,74,46,0.12);}
+  .modal-box input.invalid,.modal-box select.invalid{border-color:var(--red);}
   .modal-actions{
     display:flex;gap:10px;
     margin-top:16px;
@@ -528,6 +530,41 @@
     border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);
     margin-bottom:14px;
   }
+  .teacher-form-fields.locked{
+    opacity:.45;
+    pointer-events:none;
+    filter:grayscale(.3);
+  }
+  .index-verify-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .index-verify-row input{margin-bottom:0;}
+  .index-verify-row button{
+    flex:none;
+    white-space:nowrap;
+    background:var(--forest);
+    color:var(--white);
+    border:none;
+    padding:0 16px;
+    border-radius:3px;
+    font-family:inherit;
+    font-weight:600;
+    font-size:.85rem;
+    cursor:pointer;
+  }
+  .index-verify-row button:hover{background:var(--forest-deep);}
+  .index-verify-row button:disabled{background:#D3CDB9;cursor:not-allowed;}
+  .verified-badge{
+    display:none;
+    align-items:center;gap:6px;
+    font-size:.8rem;
+    color:var(--forest);
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .verified-badge.show{display:flex;}
 </style>
 </head>
 <body class="kalpurush">
@@ -556,25 +593,54 @@
       </div>
 
       <div id="teacherExistingWrap" style="display:none;">
-        <select id="teacherExistingSelect" class="teacher-existing-select" onchange="fillTeacherModalFromExisting()">
+        <select id="teacherExistingSelect" class="teacher-existing-select" onchange="onTeacherExistingSelectChange()">
           <option value="">-- নাম নির্বাচন করুন --</option>
         </select>
+
+        <div class="index-verify-row" id="indexVerifyRow" style="display:none;">
+          <input type="text" id="tEditIndexInput" placeholder="ইনডেক্স নম্বর দিন">
+          <button type="button" id="tEditVerifyBtn" onclick="verifyTeacherIndexAndFill()">যাচাই করুন</button>
+        </div>
+        <div class="validation-message" id="tEditIndexError">সঠিক ইনডেক্স নম্বর দিন</div>
+        <div class="verified-badge" id="tEditVerifiedBadge"><i class="fas fa-circle-check"></i> ইনডেক্স যাচাই সম্পন্ন হয়েছে</div>
       </div>
 
-      <input type="text" id="tName" placeholder="নাম">
-      <div class="validation-message" id="tNameError">নাম লিখুন</div>
+      <div id="teacherFormFields" class="teacher-form-fields">
+        <input type="text" id="tName" placeholder="নাম (বাংলায় লিখুন)">
+        <div class="validation-message" id="tNameError">নাম লিখুন</div>
 
-      <input type="text" id="tDesignation" placeholder="পদবি" style="margin-top:10px;">
-      <div class="validation-message" id="tDesignationError">পদবি লিখুন</div>
+        <input type="text" id="tIndexNumber" placeholder="ইনডেক্স নম্বর" style="margin-top:10px;">
+        <div class="validation-message" id="tIndexNumberError">ইনডেক্স নম্বর লিখুন</div>
 
-      <input type="text" id="tSchool" placeholder="বিদ্যালয়ের নাম ও ঠিকানা" style="margin-top:10px;">
-      <div class="validation-message" id="tSchoolError">বিদ্যালয়ের নাম লিখুন</div>
+        <select id="tDesignation" style="margin-top:10px;">
+          <option value="">-- পদবি নির্বাচন করুন --</option>
+          <option value="সহকারি শিক্ষক">সহকারি শিক্ষক</option>
+          <option value="প্রধান শিক্ষক">প্রধান শিক্ষক</option>
+          <option value="সহযোগী শিক্ষক">সহযোগী শিক্ষক</option>
+          <option value="উচ্চমান সহকারি শিক্ষক">উচ্চমান সহকারি শিক্ষক</option>
+          <option value="শারীরিক শিক্ষা প্রশিক্ষক">শারীরিক শিক্ষা প্রশিক্ষক</option>
+          <option value="গ্রন্থাগারিক">গ্রন্থাগারিক</option>
+          <option value="কম্পিউটার প্রশিক্ষক">কম্পিউটার প্রশিক্ষক</option>
+        </select>
+        <div class="validation-message" id="tDesignationError">পদবি নির্বাচন করুন</div>
 
-      <input type="text" id="tMobile" placeholder="মোবাইল নম্বর (ঐচ্ছিক)" style="margin-top:10px;">
-      <div class="validation-message" id="tMobileError">সঠিক মোবাইল নম্বর লিখুন</div>
+        <select id="tSchool" style="margin-top:10px;">
+          <option value="">-- বিদ্যালয়ের নাম নির্বাচন করুন --</option>
+          <option value="কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয়, কাশিয়ানী, গোপালগঞ্জ">কাশিয়ানী গিরীশ চন্দ্র পাইলট উচ্চ বিদ্যালয়, কাশিয়ানী, গোপালগঞ্জ</option>
+          <option value="গোপালগঞ্জ সরকারি উচ্চ বিদ্যালয়, গোপালগঞ্জ">গোপালগঞ্জ সরকারি উচ্চ বিদ্যালয়, গোপালগঞ্জ</option>
+          <option value="মুকসুদপুর পাইলট উচ্চ বিদ্যালয়, মুকসুদপুর, গোপালগঞ্জ">মুকসুদপুর পাইলট উচ্চ বিদ্যালয়, মুকসুদপুর, গোপালগঞ্জ</option>
+          <option value="টুঙ্গিপাড়া পাইলট উচ্চ বিদ্যালয়, টুঙ্গিপাড়া, গোপালগঞ্জ">টুঙ্গিপাড়া পাইলট উচ্চ বিদ্যালয়, টুঙ্গিপাড়া, গোপালগঞ্জ</option>
+          <option value="কোটালীপাড়া উচ্চ বিদ্যালয়, কোটালীপাড়া, গোপালগঞ্জ">কোটালীপাড়া উচ্চ বিদ্যালয়, কোটালীপাড়া, গোপালগঞ্জ</option>
+          <option value="মাকসুদপুর উচ্চ বিদ্যালয়, মাকসুদপুর, গোপালগঞ্জ">মাকসুদপুর উচ্চ বিদ্যালয়, মাকসুদপুর, গোপালগঞ্জ</option>
+        </select>
+        <div class="validation-message" id="tSchoolError">বিদ্যালয়ের নাম নির্বাচন করুন</div>
 
-      <input type="text" id="tEmail" placeholder="ইমেইল (ঐচ্ছিক)" style="margin-top:10px;">
-      <div class="validation-message" id="tEmailError">সঠিক ইমেইল ঠিকানা লিখুন</div>
+        <input type="text" id="tMobile" placeholder="মোবাইল নম্বর (ঐচ্ছিক)" style="margin-top:10px;">
+        <div class="validation-message" id="tMobileError">সঠিক মোবাইল নম্বর লিখুন</div>
+
+        <input type="text" id="tEmail" placeholder="ইমেইল (ঐচ্ছিক, শুধু ইংরেজিতে)" style="margin-top:10px;">
+        <div class="validation-message" id="tEmailError">সঠিক ইমেইল ঠিকানা লিখুন</div>
+      </div>
 
       <div class="sheet-status" id="teacherModalStatus" style="margin-top:8px;"></div>
 
@@ -678,13 +744,47 @@
           <div class="field field-with-toggle">
             <label>পদবি<span class="req">*</span></label>
             <select id="designationSelect" required>
-              <option value="সহকারি শিক্ষক">সহকারি শিক্ষক</option>
-              <option value="প্রধান শিক্ষক">প্রধান শিক্ষক</option>
-              <option value="সহযোগী শিক্ষক">সহযোগী শিক্ষক</option>
-              <option value="উচ্চমান সহকারি শিক্ষক">উচ্চমান সহকারি শিক্ষক</option>
-              <option value="শারীরিক শিক্ষা প্রশিক্ষক">শারীরিক শিক্ষা প্রশিক্ষক</option>
-              <option value="গ্রন্থাগারিক">গ্রন্থাগারিক</option>
-              <option value="কম্পিউটার প্রশিক্ষক">কম্পিউটার প্রশিক্ষক</option>
+              <optgroup label="মাধ্যমিক বিদ্যালয়">
+                <option value="প্রধান শিক্ষক">প্রধান শিক্ষক</option>
+                <option value="ভারপ্রাপ্ত প্রধান শিক্ষক">ভারপ্রাপ্ত প্রধান শিক্ষক</option>
+                <option value="সহকারি প্রধান শিক্ষক">সহকারি প্রধান শিক্ষক</option>
+                <option value="সিনিয়র শিক্ষক">সিনিয়র শিক্ষক</option>
+                <option value="সহকারি শিক্ষক">সহকারি শিক্ষক</option>
+                <option value="উচ্চমান সহকারি শিক্ষক">উচ্চমান সহকারি শিক্ষক</option>
+                <option value="সহযোগী শিক্ষক">সহযোগী শিক্ষক</option>
+                <option value="সহকারি শিক্ষক (কম্পিউটার শিক্ষা)">সহকারি শিক্ষক (কম্পিউটার শিক্ষা)</option>
+                <option value="কম্পিউটার প্রশিক্ষক">কম্পিউটার প্রশিক্ষক</option>
+                <option value="সহকারি শিক্ষক (কৃষি শিক্ষা)">সহকারি শিক্ষক (কৃষি শিক্ষা)</option>
+                <option value="শারীরিক শিক্ষা প্রশিক্ষক">শারীরিক শিক্ষা প্রশিক্ষক</option>
+                <option value="সহকারি শিক্ষক (ইসলাম শিক্ষা)">সহকারি শিক্ষক (ইসলাম শিক্ষা)</option>
+                <option value="সহকারি শিক্ষক (হিন্দুধর্ম শিক্ষা)">সহকারি শিক্ষক (হিন্দুধর্ম শিক্ষা)</option>
+                <option value="সহকারি শিক্ষক (খ্রিস্টধর্ম শিক্ষা)">সহকারি শিক্ষক (খ্রিস্টধর্ম শিক্ষা)</option>
+                <option value="সহকারি শিক্ষক (বৌদ্ধধর্ম শিক্ষা)">সহকারি শিক্ষক (বৌদ্ধধর্ম শিক্ষা)</option>
+                <option value="গ্রন্থাগারিক">গ্রন্থাগারিক</option>
+                <option value="সহকারি গ্রন্থাগারিক">সহকারি গ্রন্থাগারিক</option>
+                <option value="ল্যাবরেটরি সহকারী (বিজ্ঞান)">ল্যাবরেটরি সহকারী (বিজ্ঞান)</option>
+              </optgroup>
+              <optgroup label="কারিগরি ও ভোকেশনাল">
+                <option value="প্রধান ইন্সট্রাক্টর">প্রধান ইন্সট্রাক্টর</option>
+                <option value="ইন্সট্রাক্টর (টেকনিক্যাল)">ইন্সট্রাক্টর (টেকনিক্যাল)</option>
+                <option value="জুনিয়র ইন্সট্রাক্টর">জুনিয়র ইন্সট্রাক্টর</option>
+                <option value="ইন্সট্রাক্টর (কম্পিউটার)">ইন্সট্রাক্টর (কম্পিউটার)</option>
+                <option value="ইন্সট্রাক্টর (ইলেকট্রিক্যাল)">ইন্সট্রাক্টর (ইলেকট্রিক্যাল)</option>
+                <option value="ইন্সট্রাক্টর (সিভিল)">ইন্সট্রাক্টর (সিভিল)</option>
+                <option value="ইন্সট্রাক্টর (মেকানিক্যাল)">ইন্সট্রাক্টর (মেকানিক্যাল)</option>
+                <option value="ইন্সট্রাক্টর (গার্মেন্টস ডিজাইন)">ইন্সট্রাক্টর (গার্মেন্টস ডিজাইন)</option>
+                <option value="ইন্সট্রাক্টর (কৃষি)">ইন্সট্রাক্টর (কৃষি)</option>
+                <option value="ট্রেড ইন্সট্রাক্টর">ট্রেড ইন্সট্রাক্টর</option>
+                <option value="ওয়ার্কশপ সহকারী">ওয়ার্কশপ সহকারী</option>
+                <option value="ভোকেশনাল কাউন্সেলর">ভোকেশনাল কাউন্সেলর</option>
+              </optgroup>
+              <optgroup label="দাপ্তরিক ও সহায়ক">
+                <option value="অফিস সহকারী কাম হিসাব রক্ষক">অফিস সহকারী কাম হিসাব রক্ষক</option>
+                <option value="অফিস সহায়ক">অফিস সহায়ক</option>
+                <option value="নৈশ প্রহরী">নৈশ প্রহরী</option>
+                <option value="আয়া">আয়া</option>
+                <option value="পরিচ্ছন্নতা কর্মী">পরিচ্ছন্নতা কর্মী</option>
+              </optgroup>
             </select>
             <input type="text" id="designationInput" class="custom-input" style="display:none" placeholder="পদবি লিখুন..." required>
             <button type="button" class="toggle-btn" onclick="toggleInput('designation')"><i class="fas fa-pen"></i></button>
@@ -712,7 +812,7 @@
             <label>ইমেইল</label>
             <select id="emailSelect">
               <option value="emdadulhaque1990@gmail.com">emdadulhaque1990@gmail.com</option>
-              <option value="uzzallabonipayel@gmail">uzzallabonipayel@gmail</option>
+              <option value="uzzallabonipayel@gmail.com">uzzallabonipayel@gmail.com</option>
               <option value="nayandas@gmail.com">nayandas@gmail.com</option>
               <option value="principal@school.edu.bd">principal@school.edu.bd</option>
               <option value="assistant@school.edu.bd">assistant@school.edu.bd</option>
@@ -821,6 +921,7 @@
   let inputModes = { name:false, designation:false, school:false, mobile:false, email:false, leaveReason:false };
   let pendingSheetData = null;
   let TEACHER_LIST_CACHE = [];
+  let editVerified = false; // নতুন: এডিট মোডে ইনডেক্স যাচাই হয়েছে কি না
 
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("today").value = new Date().toISOString().split('T')[0];
@@ -1108,7 +1209,8 @@
   }
 
   // ==========================================================
-  // নতুন: শিক্ষক তথ্য ব্যবস্থাপনা মডাল (যোগ / হালনাগাদ)
+  // শিক্ষক তথ্য ব্যবস্থাপনা মডাল (যোগ / হালনাগাদ)
+  // এডিট মোডে: প্রথমে নাম নির্বাচন -> ইনডেক্স নম্বর দিয়ে যাচাই -> মিললে তথ্য দেখা/সম্পাদনা যাবে
   // ==========================================================
   let teacherModalMode = 'add';
 
@@ -1122,24 +1224,51 @@
     document.getElementById('teacherModal').classList.remove('show');
   }
 
+  function lockTeacherFormFields() {
+    editVerified = false;
+    document.getElementById('teacherFormFields').classList.add('locked');
+    document.getElementById('tEditVerifiedBadge').classList.remove('show');
+    document.getElementById('teacherModalSaveBtn').disabled = true;
+  }
+
+  function unlockTeacherFormFields() {
+    editVerified = true;
+    document.getElementById('teacherFormFields').classList.remove('locked');
+    document.getElementById('tEditVerifiedBadge').classList.add('show');
+    document.getElementById('teacherModalSaveBtn').disabled = false;
+  }
+
   function setTeacherModalMode(mode) {
     teacherModalMode = mode;
     document.getElementById('teacherAddModeBtn').classList.toggle('active', mode === 'add');
     document.getElementById('teacherEditModeBtn').classList.toggle('active', mode === 'edit');
     document.getElementById('teacherExistingWrap').style.display = (mode === 'edit') ? 'block' : 'none';
+    document.getElementById('indexVerifyRow').style.display = 'none';
     clearTeacherModalForm();
-    document.getElementById('teacherModalSaveBtn').textContent = (mode === 'edit') ? 'তথ্য হালনাগাদ করুন' : 'সংরক্ষণ করুন';
-    if (mode === 'edit') populateTeacherExistingSelect();
+
+    if (mode === 'edit') {
+      // এডিট মোডে ঢোকামাত্র ফর্ম-ফিল্ডগুলো লক থাকবে, যতক্ষণ না ইনডেক্স যাচাই হয়
+      lockTeacherFormFields();
+      document.getElementById('teacherModalSaveBtn').textContent = 'তথ্য হালনাগাদ করুন';
+      populateTeacherExistingSelect();
+    } else {
+      // নতুন শিক্ষক যোগের ক্ষেত্রে ফিল্ড সবসময় খোলা থাকবে
+      unlockTeacherFormFields();
+      document.getElementById('teacherModalSaveBtn').textContent = 'সংরক্ষণ করুন';
+    }
   }
 
   function clearTeacherModalForm() {
-    ['tName','tDesignation','tSchool','tMobile','tEmail'].forEach(id => {
+    ['tName','tIndexNumber','tDesignation','tSchool','tMobile','tEmail'].forEach(id => {
       document.getElementById(id).value = '';
       document.getElementById(id).classList.remove('invalid');
     });
-    ['tNameError','tDesignationError','tSchoolError','tMobileError','tEmailError'].forEach(id => {
+    ['tNameError','tIndexNumberError','tDesignationError','tSchoolError','tMobileError','tEmailError'].forEach(id => {
       document.getElementById(id).classList.remove('show');
     });
+    document.getElementById('tEditIndexInput').value = '';
+    document.getElementById('tEditIndexInput').classList.remove('invalid');
+    document.getElementById('tEditIndexError').classList.remove('show');
     const status = document.getElementById('teacherModalStatus');
     status.textContent = '';
     status.className = 'sheet-status';
@@ -1152,31 +1281,164 @@
       TEACHER_LIST_CACHE.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
   }
 
-  function fillTeacherModalFromExisting() {
+  // নাম নির্বাচন করলে সরাসরি তথ্য না দেখিয়ে, প্রথমে ইনডেক্স-যাচাই ঘর দেখানো হয়
+  function onTeacherExistingSelectChange() {
     const name = document.getElementById('teacherExistingSelect').value;
-    const record = TEACHER_LIST_CACHE.find(t => String(t.name).trim() === String(name).trim());
+    lockTeacherFormFields();
+    clearTeacherFormInputsOnly();
+    document.getElementById('tEditIndexInput').value = '';
+    document.getElementById('tEditIndexInput').classList.remove('invalid');
+    document.getElementById('tEditIndexError').classList.remove('show');
+    document.getElementById('indexVerifyRow').style.display = name ? 'flex' : 'none';
+    if (name) setTimeout(() => document.getElementById('tEditIndexInput').focus(), 50);
+  }
+
+  function clearTeacherFormInputsOnly() {
+    ['tName','tIndexNumber','tDesignation','tSchool','tMobile','tEmail'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+  }
+
+  // ইনডেক্স নম্বর দিয়ে Sheet-এ যাচাই করে, মিললে তবেই সব তথ্য এনে ফর্মে দেখানো হবে
+  async function verifyTeacherIndexAndFill() {
+    const name = document.getElementById('teacherExistingSelect').value;
+    const indexInput = document.getElementById('tEditIndexInput');
+    const errorDiv = document.getElementById('tEditIndexError');
+    const verifyBtn = document.getElementById('tEditVerifyBtn');
+    const givenIndex = indexInput.value.trim();
+
+    if (!name) {
+      errorDiv.textContent = 'প্রথমে একটি নাম নির্বাচন করুন';
+      errorDiv.classList.add('show');
+      return;
+    }
+    if (!givenIndex) {
+      indexInput.classList.add('invalid');
+      errorDiv.textContent = 'ইনডেক্স নম্বর লিখুন';
+      errorDiv.classList.add('show');
+      return;
+    }
+    if (!SHEET_WEB_APP_URL || SHEET_WEB_APP_URL.indexOf('PASTE_YOUR_WEB_APP_URL_HERE') !== -1) {
+      errorDiv.textContent = 'Sheet সংযোগ কনফিগার করা হয়নি';
+      errorDiv.classList.add('show');
+      return;
+    }
+
+    verifyBtn.disabled = true;
+    verifyBtn.textContent = 'যাচাই হচ্ছে...';
+    errorDiv.classList.remove('show');
+    indexInput.classList.remove('invalid');
+
+    try {
+      const url = `${SHEET_WEB_APP_URL}?action=verify&name=${encodeURIComponent(name)}&index=${encodeURIComponent(givenIndex)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.error) {
+        indexInput.classList.add('invalid');
+        errorDiv.textContent = 'যাচাই করা যায়নি, আবার চেষ্টা করুন';
+        errorDiv.classList.add('show');
+        lockTeacherFormFields();
+        return;
+      }
+      if (!data.found || !data.match) {
+        indexInput.classList.add('invalid');
+        errorDiv.textContent = !data.found ? 'এই নামে কোনো ইনডেক্স নম্বর পাওয়া যায়নি' : 'ইনডেক্স নম্বর সঠিক নয়';
+        errorDiv.classList.add('show');
+        lockTeacherFormFields();
+        return;
+      }
+
+      // ইনডেক্স মিলেছে -> এখন সম্পূর্ণ তথ্য এনে ফর্মে দেখানো হবে (ইনডেক্সসহ, যাতে চাইলে বদলানো যায়)
+      await fillTeacherModalFromExisting(name, givenIndex);
+      unlockTeacherFormFields();
+      showNotification('ইনডেক্স যাচাই সফল হয়েছে, তথ্য এখন সম্পাদনাযোগ্য');
+    } catch (err) {
+      indexInput.classList.add('invalid');
+      errorDiv.textContent = 'সার্ভারের সাথে সংযোগ ব্যর্থ হয়েছে';
+      errorDiv.classList.add('show');
+      lockTeacherFormFields();
+    } finally {
+      verifyBtn.disabled = false;
+      verifyBtn.textContent = 'যাচাই করুন';
+    }
+  }
+
+  // যাচাই সফল হলে Sheet থেকে সম্পূর্ণ তথ্য (ইনডেক্সসহ) এনে ফর্মে বসানো
+  async function fillTeacherModalFromExisting(name, verifiedIndex) {
+    let record = TEACHER_LIST_CACHE.find(t => String(t.name).trim() === String(name).trim());
+    let indexValue = verifiedIndex || '';
+
+    // ইনডেক্স নম্বর সবসময় Sheet থেকেই আনা ভালো (তালিকা ক্যাশে ইনডেক্স থাকে না)
+    if (SHEET_WEB_APP_URL && SHEET_WEB_APP_URL.indexOf('PASTE_YOUR_WEB_APP_URL_HERE') === -1) {
+      try {
+        const res = await fetch(`${SHEET_WEB_APP_URL}?action=get&name=${encodeURIComponent(name)}`);
+        const data = await res.json();
+        if (data.found) {
+          record = data;
+          indexValue = (data.index !== undefined && data.index !== '') ? data.index : indexValue;
+        }
+      } catch (err) { /* ব্যর্থ হলে ক্যাশ ও যাচাইকৃত ইনডেক্স দিয়েই কাজ চালানো হবে */ }
+    }
     if (!record) return;
+
     document.getElementById('tName').value = record.name || '';
+    document.getElementById('tIndexNumber').value = indexValue || '';
     document.getElementById('tDesignation').value = record.designation || '';
     document.getElementById('tSchool').value = record.school || '';
     document.getElementById('tMobile').value = record.mobile || '';
     document.getElementById('tEmail').value = record.email || '';
   }
 
+  function containsEnglishLetters(str) {
+    return /[A-Za-z]/.test(str);
+  }
+
+  function containsBanglaChars(str) {
+    return /[\u0980-\u09FF]/.test(str);
+  }
+
   function validateTeacherModalField(id) {
-    const value = document.getElementById(id).value.trim();
-    let isValid = true;
-    if (id === 'tName' || id === 'tDesignation' || id === 'tSchool') {
-      isValid = !!value;
-    } else if (id === 'tMobile' && value) {
-      isValid = /^01[3-9]\d{8}$/.test(convertToEnglishNumber(value.replace(/\s/g, '')));
-    } else if (id === 'tEmail' && value) {
-      isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    }
     const el = document.getElementById(id);
+    const value = el.value.trim();
     const err = document.getElementById(id + 'Error');
+    let isValid = true;
+    let message = '';
+
+    if (id === 'tName') {
+      if (!value) {
+        isValid = false; message = 'নাম লিখুন';
+      } else if (containsEnglishLetters(value)) {
+        isValid = false; message = 'ইংরেজি অক্ষর নয়, শুধু বাংলায় লিখুন';
+      } else if (!containsBanglaChars(value)) {
+        isValid = false; message = 'বাংলায় লিখুন';
+      }
+    } else if (id === 'tDesignation') {
+      if (!value) { isValid = false; message = 'পদবি নির্বাচন করুন'; }
+    } else if (id === 'tSchool') {
+      if (!value) { isValid = false; message = 'বিদ্যালয়ের নাম নির্বাচন করুন'; }
+    } else if (id === 'tIndexNumber') {
+      if (!value) { isValid = false; message = 'ইনডেক্স নম্বর লিখুন'; }
+    } else if (id === 'tMobile') {
+      if (value) {
+        const mobileEnglish = convertToEnglishNumber(value.replace(/\s/g, ''));
+        if (!/^01[3-9]\d{8}$/.test(mobileEnglish)) { isValid = false; message = 'সঠিক মোবাইল নম্বর লিখুন'; }
+      }
+    } else if (id === 'tEmail') {
+      if (value) {
+        if (containsBanglaChars(value)) {
+          isValid = false; message = 'ইমেইল শুধু ইংরেজিতে লিখুন';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          isValid = false; message = 'সঠিক ইমেইল ঠিকানা লিখুন';
+        }
+      }
+    }
+
     el.classList.toggle('invalid', !isValid);
-    if (err) err.classList.toggle('show', !isValid);
+    if (err) {
+      if (message) err.textContent = message;
+      err.classList.toggle('show', !isValid);
+    }
     return isValid;
   }
 
@@ -1188,8 +1450,13 @@
       status.className = 'sheet-status error';
       return;
     }
+    if (teacherModalMode === 'edit' && !editVerified) {
+      status.textContent = 'হালনাগাদ করতে প্রথমে ইনডেক্স নম্বর যাচাই করুন';
+      status.className = 'sheet-status error';
+      return;
+    }
 
-    const fields = ['tName','tDesignation','tSchool','tMobile','tEmail'];
+    const fields = ['tName','tIndexNumber','tDesignation','tSchool','tMobile','tEmail'];
     let ok = true;
     fields.forEach(f => { if (!validateTeacherModalField(f)) ok = false; });
     if (!ok) {
@@ -1207,6 +1474,7 @@
     const payload = {
       type: 'teacher',
       name: document.getElementById('tName').value.trim(),
+      index: document.getElementById('tIndexNumber').value.trim(),
       designation: document.getElementById('tDesignation').value.trim(),
       school: document.getElementById('tSchool').value.trim(),
       mobile: document.getElementById('tMobile').value.trim(),
@@ -1242,7 +1510,8 @@
       status.textContent = 'সার্ভারের সাথে সংযোগ ব্যর্থ হয়েছে';
       status.className = 'sheet-status error';
     } finally {
-      saveBtn.disabled = false;
+      saveBtn.disabled = editVerified ? false : (teacherModalMode === 'edit');
+      if (teacherModalMode === 'add') saveBtn.disabled = false;
     }
   }
 
