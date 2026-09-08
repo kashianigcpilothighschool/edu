@@ -369,6 +369,13 @@
   .action-btn.reset-btn{color:var(--red);}
   .action-btn.reset-btn:hover{background:var(--red);border-color:var(--red);color:var(--white);}
 
+  .action-buttons.result-actions-top{
+    border-top:none;
+    background:transparent;
+    padding:0;
+    margin-top:14px;
+  }
+
   /* ---------- Notification ---------- */
   .notification{
     position:fixed;top:20px;right:20px;
@@ -398,6 +405,8 @@
     .action-buttons{flex-wrap:wrap;}
     .action-btn{min-width:33%;}
     .toolbar{flex-direction:column;}
+    .btn-row{flex-direction:column;}
+    .btn-row .generate-btn,.btn-row .manage-teacher-btn{min-width:100%;}
   }
 
   @media print{
@@ -470,6 +479,55 @@
   .modal-confirm:hover{background:var(--forest-deep);}
   .modal-cancel{background:var(--paper-deep);color:var(--ink);}
   .modal-cancel:hover{background:var(--line);}
+
+  /* ---------- Teacher management (নতুন) ---------- */
+  .btn-row{
+    display:flex;
+    gap:12px;
+    margin-top:12px;
+    flex-wrap:wrap;
+  }
+  .btn-row .generate-btn{
+    flex:2;
+    min-width:220px;
+    margin-top:0;
+  }
+  .btn-row .manage-teacher-btn{
+    flex:1;
+    min-width:200px;
+  }
+  .manage-teacher-btn{
+    background:var(--brass-soft);
+    border:1.5px dashed var(--brass);
+    color:var(--brass);
+    padding:17px 14px;
+    border-radius:999px;
+    font-family:inherit;
+    font-size:.85rem;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:background .18s ease,color .18s ease;
+  }
+  .manage-teacher-btn:hover{background:var(--brass);color:var(--white);}
+  .teacher-mode-bar{
+    display:flex;gap:8px;
+    background:var(--paper-deep);
+    border-radius:999px;
+    padding:3px;
+    margin-bottom:16px;
+  }
+  .teacher-mode-bar button{
+    flex:1;background:transparent;border:none;padding:9px;
+    border-radius:999px;font-family:inherit;font-size:.8rem;font-weight:600;
+    color:var(--ink-soft);cursor:pointer;transition:.18s;
+  }
+  .teacher-mode-bar button.active{background:var(--forest);color:var(--white);}
+  .teacher-existing-select{
+    width:100%;font-family:inherit;font-size:.9rem;padding:10px 12px;
+    border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);
+    margin-bottom:14px;
+  }
 </style>
 </head>
 <body class="kalpurush">
@@ -482,6 +540,47 @@
       <div class="modal-actions">
         <button class="modal-cancel" onclick="closeIndexModal()">বাতিল</button>
         <button class="modal-confirm" onclick="confirmIndexAndPrint()">প্রিন্ট করুন</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== নতুন: শিক্ষক তথ্য ব্যবস্থাপনা মডাল ========== -->
+  <div class="modal-overlay" id="teacherModal">
+    <div class="modal-box" style="max-width:460px;">
+      <h3><i class="fas fa-chalkboard-user"></i> শিক্ষক তথ্য ব্যবস্থাপনা</h3>
+      <p>নতুন শিক্ষক যোগ করুন অথবা বিদ্যমান তথ্য হালনাগাদ করুন</p>
+
+      <div class="teacher-mode-bar">
+        <button type="button" id="teacherAddModeBtn" class="active" onclick="setTeacherModalMode('add')">নতুন শিক্ষক</button>
+        <button type="button" id="teacherEditModeBtn" onclick="setTeacherModalMode('edit')">তথ্য হালনাগাদ</button>
+      </div>
+
+      <div id="teacherExistingWrap" style="display:none;">
+        <select id="teacherExistingSelect" class="teacher-existing-select" onchange="fillTeacherModalFromExisting()">
+          <option value="">-- নাম নির্বাচন করুন --</option>
+        </select>
+      </div>
+
+      <input type="text" id="tName" placeholder="নাম">
+      <div class="validation-message" id="tNameError">নাম লিখুন</div>
+
+      <input type="text" id="tDesignation" placeholder="পদবি" style="margin-top:10px;">
+      <div class="validation-message" id="tDesignationError">পদবি লিখুন</div>
+
+      <input type="text" id="tSchool" placeholder="বিদ্যালয়ের নাম ও ঠিকানা" style="margin-top:10px;">
+      <div class="validation-message" id="tSchoolError">বিদ্যালয়ের নাম লিখুন</div>
+
+      <input type="text" id="tMobile" placeholder="মোবাইল নম্বর (ঐচ্ছিক)" style="margin-top:10px;">
+      <div class="validation-message" id="tMobileError">সঠিক মোবাইল নম্বর লিখুন</div>
+
+      <input type="text" id="tEmail" placeholder="ইমেইল (ঐচ্ছিক)" style="margin-top:10px;">
+      <div class="validation-message" id="tEmailError">সঠিক ইমেইল ঠিকানা লিখুন</div>
+
+      <div class="sheet-status" id="teacherModalStatus" style="margin-top:8px;"></div>
+
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeTeacherModal()">বাতিল</button>
+        <button class="modal-confirm" id="teacherModalSaveBtn" onclick="saveTeacherFromModal()">সংরক্ষণ করুন</button>
       </div>
     </div>
   </div>
@@ -687,19 +786,25 @@
         </div>
       </div>
 
-      <button class="generate-btn" onclick="generate()" id="generateBtn">
-        <i class="fas fa-feather-pointed"></i>
-        আনুষ্ঠানিক আবেদনপত্র তৈরি করুন
-      </button>
-    </div>
+      <div class="btn-row">
+        <button type="button" class="manage-teacher-btn" onclick="openTeacherModal()">
+          <i class="fas fa-user-plus"></i> নতুন শিক্ষক যোগ করুন / তথ্য হালনাগাদ করুন
+        </button>
+        <button class="generate-btn" onclick="generate()" id="generateBtn">
+          <i class="fas fa-feather-pointed"></i>
+          সাবমিট করুন
+        </button>
+      </div>
 
-    <div id="result" class="result-card">
-      <div class="result-paper" id="applicationContent"></div>
-      <div class="action-buttons">
+      <div class="action-buttons result-actions-top" id="resultActions" style="display:none;">
         <button class="action-btn copy-btn" onclick="copyToClipboard()"><i class="fas fa-copy"></i> কপি করুন</button>
         <button class="action-btn print-btn" onclick="printApplication()"><i class="fas fa-print"></i> প্রিন্ট করুন</button>
         <button class="action-btn reset-btn" onclick="resetForm()"><i class="fas fa-rotate-left"></i> নতুন আবেদন</button>
       </div>
+    </div>
+
+    <div id="result" class="result-card">
+      <div class="result-paper" id="applicationContent"></div>
     </div>
 
   </div>
@@ -955,6 +1060,7 @@
       TEACHER_LIST_CACHE = data.teachers;
       // নাম ড্রপডাউন নতুন করে সাজানো (Sheet-এর ডেটা দিয়ে)
       const nameSelect = document.getElementById('nameSelect');
+      const previouslySelected = nameSelect.value;
       nameSelect.innerHTML = '';
       TEACHER_LIST_CACHE.forEach(t => {
         const opt = document.createElement('option');
@@ -962,8 +1068,11 @@
         opt.textContent = t.name;
         nameSelect.appendChild(opt);
       });
-      // প্রথম শিক্ষকের তথ্য দিয়ে বাকি ফিল্ড auto-fill
-      if (TEACHER_LIST_CACHE.length > 0) {
+      // আগে নির্বাচিত নাম তালিকায় থাকলে সেটাই আবার নির্বাচিত রাখা, নাহলে প্রথম শিক্ষক
+      const stillExists = TEACHER_LIST_CACHE.some(t => t.name === previouslySelected);
+      if (stillExists) {
+        nameSelect.value = previouslySelected;
+      } else if (TEACHER_LIST_CACHE.length > 0) {
         autoFillTeacherInfo(TEACHER_LIST_CACHE[0].name);
         loadTeacherDataFromSheet(TEACHER_LIST_CACHE[0].name);
       }
@@ -995,6 +1104,156 @@
     inputEl.value = value || '';
     if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-list"></i>';
     validateField(field);
+    updateProgress();
+  }
+
+  // ==========================================================
+  // নতুন: শিক্ষক তথ্য ব্যবস্থাপনা মডাল (যোগ / হালনাগাদ)
+  // ==========================================================
+  let teacherModalMode = 'add';
+
+  function openTeacherModal() {
+    setTeacherModalMode('add');
+    populateTeacherExistingSelect();
+    document.getElementById('teacherModal').classList.add('show');
+  }
+
+  function closeTeacherModal() {
+    document.getElementById('teacherModal').classList.remove('show');
+  }
+
+  function setTeacherModalMode(mode) {
+    teacherModalMode = mode;
+    document.getElementById('teacherAddModeBtn').classList.toggle('active', mode === 'add');
+    document.getElementById('teacherEditModeBtn').classList.toggle('active', mode === 'edit');
+    document.getElementById('teacherExistingWrap').style.display = (mode === 'edit') ? 'block' : 'none';
+    clearTeacherModalForm();
+    document.getElementById('teacherModalSaveBtn').textContent = (mode === 'edit') ? 'তথ্য হালনাগাদ করুন' : 'সংরক্ষণ করুন';
+    if (mode === 'edit') populateTeacherExistingSelect();
+  }
+
+  function clearTeacherModalForm() {
+    ['tName','tDesignation','tSchool','tMobile','tEmail'].forEach(id => {
+      document.getElementById(id).value = '';
+      document.getElementById(id).classList.remove('invalid');
+    });
+    ['tNameError','tDesignationError','tSchoolError','tMobileError','tEmailError'].forEach(id => {
+      document.getElementById(id).classList.remove('show');
+    });
+    const status = document.getElementById('teacherModalStatus');
+    status.textContent = '';
+    status.className = 'sheet-status';
+    document.getElementById('teacherExistingSelect').value = '';
+  }
+
+  function populateTeacherExistingSelect() {
+    const select = document.getElementById('teacherExistingSelect');
+    select.innerHTML = '<option value="">-- নাম নির্বাচন করুন --</option>' +
+      TEACHER_LIST_CACHE.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+  }
+
+  function fillTeacherModalFromExisting() {
+    const name = document.getElementById('teacherExistingSelect').value;
+    const record = TEACHER_LIST_CACHE.find(t => String(t.name).trim() === String(name).trim());
+    if (!record) return;
+    document.getElementById('tName').value = record.name || '';
+    document.getElementById('tDesignation').value = record.designation || '';
+    document.getElementById('tSchool').value = record.school || '';
+    document.getElementById('tMobile').value = record.mobile || '';
+    document.getElementById('tEmail').value = record.email || '';
+  }
+
+  function validateTeacherModalField(id) {
+    const value = document.getElementById(id).value.trim();
+    let isValid = true;
+    if (id === 'tName' || id === 'tDesignation' || id === 'tSchool') {
+      isValid = !!value;
+    } else if (id === 'tMobile' && value) {
+      isValid = /^01[3-9]\d{8}$/.test(convertToEnglishNumber(value.replace(/\s/g, '')));
+    } else if (id === 'tEmail' && value) {
+      isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+    const el = document.getElementById(id);
+    const err = document.getElementById(id + 'Error');
+    el.classList.toggle('invalid', !isValid);
+    if (err) err.classList.toggle('show', !isValid);
+    return isValid;
+  }
+
+  async function saveTeacherFromModal() {
+    const status = document.getElementById('teacherModalStatus');
+
+    if (teacherModalMode === 'edit' && !document.getElementById('teacherExistingSelect').value) {
+      status.textContent = 'হালনাগাদ করতে প্রথমে একটি নাম নির্বাচন করুন';
+      status.className = 'sheet-status error';
+      return;
+    }
+
+    const fields = ['tName','tDesignation','tSchool','tMobile','tEmail'];
+    let ok = true;
+    fields.forEach(f => { if (!validateTeacherModalField(f)) ok = false; });
+    if (!ok) {
+      status.textContent = 'দয়া করে সব প্রয়োজনীয় তথ্য সঠিকভাবে পূরণ করুন';
+      status.className = 'sheet-status error';
+      return;
+    }
+
+    if (!SHEET_WEB_APP_URL || SHEET_WEB_APP_URL.indexOf('PASTE_YOUR_WEB_APP_URL_HERE') !== -1) {
+      status.textContent = 'Sheet Web App URL কনফিগার করা হয়নি';
+      status.className = 'sheet-status error';
+      return;
+    }
+
+    const payload = {
+      type: 'teacher',
+      name: document.getElementById('tName').value.trim(),
+      designation: document.getElementById('tDesignation').value.trim(),
+      school: document.getElementById('tSchool').value.trim(),
+      mobile: document.getElementById('tMobile').value.trim(),
+      email: document.getElementById('tEmail').value.trim()
+    };
+
+    const saveBtn = document.getElementById('teacherModalSaveBtn');
+    saveBtn.disabled = true;
+    status.textContent = 'সংরক্ষণ করা হচ্ছে...';
+    status.className = 'sheet-status loading';
+
+    try {
+      const res = await fetch(SHEET_WEB_APP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        status.textContent = data.action === 'updated' ? 'তথ্য সফলভাবে হালনাগাদ হয়েছে ✓' : 'নতুন শিক্ষক সফলভাবে যোগ হয়েছে ✓';
+        status.className = 'sheet-status success';
+        showNotification('শিক্ষকের তথ্য সংরক্ষণ সম্পন্ন হয়েছে');
+        await loadTeacherListFromSheet();
+        populateTeacherExistingSelect();
+        selectTeacherInMainForm(payload.name);
+        setTimeout(closeTeacherModal, 1200);
+      } else {
+        status.textContent = data.error || 'সংরক্ষণ ব্যর্থ হয়েছে';
+        status.className = 'sheet-status error';
+      }
+    } catch (err) {
+      status.textContent = 'সার্ভারের সাথে সংযোগ ব্যর্থ হয়েছে';
+      status.className = 'sheet-status error';
+    } finally {
+      saveBtn.disabled = false;
+    }
+  }
+
+  // নতুন যোগ/হালনাগাদকৃত শিক্ষককে মূল ফরমের "শিক্ষকের নাম" ড্রপডাউনে নির্বাচন করে দেওয়া
+  function selectTeacherInMainForm(name) {
+    const nameSelect = document.getElementById('nameSelect');
+    if (!nameSelect) return;
+    if (inputModes.name) { toggleInput('name'); }
+    nameSelect.value = name;
+    autoFillTeacherInfo(name);
+    loadTeacherDataFromSheet(name);
     updateProgress();
   }
 
@@ -1079,9 +1338,10 @@
 
       document.getElementById("applicationContent").textContent = application;
       document.getElementById("result").style.display = "block";
+      document.getElementById("resultActions").style.display = "flex";
       document.getElementById("result").scrollIntoView({ behavior: 'smooth' });
 
-      generateBtn.innerHTML = '<i class="fas fa-feather-pointed"></i> আনুষ্ঠানিক আবেদনপত্র তৈরি করুন';
+      generateBtn.innerHTML = '<i class="fas fa-feather-pointed"></i> সাবমিট করুন';
       showNotification('আবেদনপত্র সফলভাবে তৈরি হয়েছে!');
       pendingSheetData = { name, designation, school, totalLeave };
     }, 900);
@@ -1364,6 +1624,7 @@ ${schoolParts.slice(1).join(', ')}
   function resetForm() {
     pendingSheetData = null;
     closeIndexModal();
+    closeTeacherModal();
     document.getElementById('today').value = new Date().toISOString().split('T')[0];
     document.getElementById('totalLeave').value = '0';
     document.getElementById('leaveType').value = '1';
@@ -1373,6 +1634,7 @@ ${schoolParts.slice(1).join(', ')}
     document.querySelectorAll('input, select').forEach(element => { element.classList.remove('valid', 'invalid'); });
     document.querySelectorAll('.validation-message').forEach(msg => { msg.classList.remove('show'); });
     document.getElementById('result').style.display = 'none';
+    document.getElementById('resultActions').style.display = 'none';
     setSheetStatus('', '');
     updateProgress();
     loadTeacherDataFromSheet(getFieldValue('name'));
@@ -1386,6 +1648,9 @@ ${schoolParts.slice(1).join(', ')}
     if (document.getElementById('indexModal').classList.contains('show')) {
       if (e.key === 'Enter') { e.preventDefault(); confirmIndexAndPrint(); }
       if (e.key === 'Escape') { e.preventDefault(); closeIndexModal(); }
+    }
+    if (document.getElementById('teacherModal').classList.contains('show')) {
+      if (e.key === 'Escape') { e.preventDefault(); closeTeacherModal(); }
     }
   });
 </script>
