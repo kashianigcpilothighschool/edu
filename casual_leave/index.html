@@ -7,6 +7,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <style>
   @import url('https://fonts.maateen.me/kalpurush/font.css');
+  @import url('https://fonts.maateen.me/solaiman-lipi/font.css');
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap');
 
   :root{
@@ -714,13 +715,14 @@
   let currentFont = 'kalpurush';
   let inputModes = { name:false, designation:false, school:false, mobile:false, email:false, leaveReason:false };
   let pendingSheetData = null;
+  let TEACHER_LIST_CACHE = [];
 
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("today").value = new Date().toISOString().split('T')[0];
     changeFont('kalpurush');
     updateProgress();
     addValidationListeners();
-    loadTeacherDataFromSheet(getFieldValue('name'));
+    loadTeacherListFromSheet();   // <-- নতুন: প্রথমে টিচার লিস্ট লোড হবে
   });
 
   function changeFont(font) {
@@ -791,7 +793,10 @@
       case 'mobile':
         fieldValue = getFieldValue(fieldName);
         element = inputModes[fieldName] ? document.getElementById(fieldName + 'Input') : document.getElementById(fieldName + 'Select');
-        if (fieldValue && !/^০১[3-9]\d{8}$/.test(fieldValue.replace(/\s/g, ''))) { isValid = false; errorMessage = 'সঠিক মোবাইল নম্বর লিখুন'; }
+        if (fieldValue) {
+          const mobileEnglish = convertToEnglishNumber(fieldValue.replace(/\s/g, ''));
+          if (!/^01[3-9]\d{8}$/.test(mobileEnglish)) { isValid = false; errorMessage = 'সঠিক মোবাইল নম্বর লিখুন'; }
+        }
         break;
       case 'email':
         fieldValue = getFieldValue(fieldName);
@@ -850,7 +855,10 @@
     });
     const nameSelect = document.getElementById('nameSelect');
     const nameInput = document.getElementById('nameInput');
-    nameSelect.addEventListener('change', () => loadTeacherDataFromSheet(getFieldValue('name')));
+    nameSelect.addEventListener('change', () => {
+      autoFillTeacherInfo(getFieldValue('name'));
+      loadTeacherDataFromSheet(getFieldValue('name'));
+    });
     nameInput.addEventListener('blur', () => loadTeacherDataFromSheet(getFieldValue('name')));
   }
 
@@ -901,6 +909,11 @@
     return num.toString().replace(/[0-9]/g, (m) => banglaNumbers[m]);
   }
 
+  function convertToEnglishNumber(str) {
+    const englishNumbers = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
+    return str.toString().replace(/[০-৯]/g, (m) => englishNumbers[m]);
+  }
+
   function numberToWords(num) {
     const words = ['','এক','দুই','তিন','চার','পাঁচ','ছয়','সাত','আট','নয়','দশ','এগার','বার','তের','চৌদ্দ','পনের','ষোল','সতের','আঠার','উনিশ','বিশ'];
     return words[num] || num.toString();
@@ -923,6 +936,68 @@
     el.className = 'sheet-status' + (type ? ' ' + type : '');
   }
 
+  // ==========================================================
+  // Sheet থেকে সব শিক্ষকের তালিকা (নাম, পদবি, বিদ্যালয়, মোবাইল, ইমেইল) লোড
+  // ==========================================================
+  async function loadTeacherListFromSheet() {
+    if (!SHEET_WEB_APP_URL || SHEET_WEB_APP_URL.indexOf('PASTE_YOUR_WEB_APP_URL_HERE') !== -1) {
+      setSheetStatus('Sheet সংযোগ কনফিগার করা হয়নি', '');
+      return;
+    }
+    setSheetStatus('শিক্ষক তালিকা লোড হচ্ছে...', 'loading');
+    try {
+      const res = await fetch(`${SHEET_WEB_APP_URL}?action=list`);
+      const data = await res.json();
+      if (data.error || !data.teachers) {
+        setSheetStatus('শিক্ষক তালিকা লোড করা যায়নি', 'error');
+        return;
+      }
+      TEACHER_LIST_CACHE = data.teachers;
+      // নাম ড্রপডাউন নতুন করে সাজানো (Sheet-এর ডেটা দিয়ে)
+      const nameSelect = document.getElementById('nameSelect');
+      nameSelect.innerHTML = '';
+      TEACHER_LIST_CACHE.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.name;
+        opt.textContent = t.name;
+        nameSelect.appendChild(opt);
+      });
+      // প্রথম শিক্ষকের তথ্য দিয়ে বাকি ফিল্ড auto-fill
+      if (TEACHER_LIST_CACHE.length > 0) {
+        autoFillTeacherInfo(TEACHER_LIST_CACHE[0].name);
+        loadTeacherDataFromSheet(TEACHER_LIST_CACHE[0].name);
+      }
+      setSheetStatus('শিক্ষক তালিকা লোড সম্পন্ন হয়েছে ✓', 'success');
+    } catch (err) {
+      setSheetStatus('Sheet-এর সাথে সংযোগ ব্যর্থ হয়েছে', 'error');
+    }
+  }
+
+  // ==========================================================
+  // নির্বাচিত নাম অনুযায়ী পদবি, বিদ্যালয়, মোবাইল, ইমেইল auto-fill করা
+  // ==========================================================
+  function autoFillTeacherInfo(name) {
+    const record = TEACHER_LIST_CACHE.find(t => String(t.name).trim() === String(name).trim());
+    if (!record) return;
+    setAutoFilledValue('designation', record.designation);
+    setAutoFilledValue('school', record.school);
+    setAutoFilledValue('mobile', record.mobile);
+    setAutoFilledValue('email', record.email);
+  }
+
+  function setAutoFilledValue(field, value) {
+    const selectEl = document.getElementById(field + 'Select');
+    const inputEl = document.getElementById(field + 'Input');
+    const toggleBtn = selectEl.parentElement.querySelector('.toggle-btn');
+    inputModes[field] = true;
+    selectEl.style.display = 'none';
+    inputEl.style.display = 'block';
+    inputEl.value = value || '';
+    if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-list"></i>';
+    validateField(field);
+    updateProgress();
+  }
+
   async function loadTeacherDataFromSheet(name) {
     if (!SHEET_WEB_APP_URL || SHEET_WEB_APP_URL.indexOf('PASTE_YOUR_WEB_APP_URL_HERE') !== -1) { setSheetStatus('Sheet সংযোগ কনফিগার করা হয়নি', ''); return; }
     if (!name) return;
@@ -935,7 +1010,6 @@
       if (data.found) {
         document.getElementById('totalLeave').value = data.totalLeave || 0;
         validateField('totalLeave');
-        setSheetStatus(`Sheet থেকে লোড হয়েছে (সর্বশেষ হালনাগাদ: ${data.lastUpdate || '-'})`, 'success');
       } else {
         setSheetStatus('এই নামে আগের কোনো তথ্য পাওয়া যায়নি', '');
       }
@@ -1270,6 +1344,7 @@ ${schoolParts.slice(1).join(', ')}
       <html><head><meta charset="UTF-8"><title>আবেদনপত্র</title>
       <style>
         @import url('https://fonts.maateen.me/kalpurush/font.css');
+        @import url('https://fonts.maateen.me/solaiman-lipi/font.css');
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
         body{ font-family:'${fontFamily}','Noto Sans Bengali','Kalpurush','SolaimanLipi',sans-serif; margin:1in; line-height:1.8; font-size:20px; color:#000; background:white; text-align:justify; }
         .application{ white-space:pre-line; font-size:20px; line-height:1.8; text-align:justify; }
